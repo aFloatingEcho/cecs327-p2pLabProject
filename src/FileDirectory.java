@@ -7,7 +7,7 @@ import java.io.*; // Import Java library to handle directories
 
 public class FileDirectory 
 {
-	private File[] FileList;
+	private ArrayList<File> FileList;
 	
 	public FileDirectory()
 	{
