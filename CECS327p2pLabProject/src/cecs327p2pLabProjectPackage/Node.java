@@ -12,11 +12,11 @@ public class Node
 {
 	/** The files local to this machine we wish to sync.  Directory should be specified in the constructor.  */ 
 	//Perhaps change this to a List<File>?
-	private File[] localFiles;
+	private ArrayList<File> localFiles;
 	
 	/** Nodes that this object has a direct connection to */
 	//Perhaps change this to a List<Node>?
-	private Node[] neighboringNodes;
+	private ArrayList<File> neighboringNodes;
 	
 	/**Timestamp for the purposes of determining which node is the oldest.*/
 	Timestamp timestamp = new Timestamp(System.currentTimeMillis());
