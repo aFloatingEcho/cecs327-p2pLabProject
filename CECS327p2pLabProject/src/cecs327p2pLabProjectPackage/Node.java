@@ -1,3 +1,5 @@
+import java.time.*;
+
 /**
  * A Node on our Peer to Peer Network.  Should begin with a list of local files from a given directory.
  * Needs to discover and connect to other nodes on the network, then sync files together so they all have the same contents.
@@ -16,6 +18,9 @@ public class Node
 	//Perhaps change this to a List<Node>?
 	private Node[] neighboringNodes;
 	
+	/**Timestamp for the purposes of determining which node is the oldest.*/
+	Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+	
 	//Currently dummy constructor
 	public Node()
 	{
@@ -23,6 +28,43 @@ public class Node
 		neighboringNodes = null;
 	}
 	
+	/**
+	 * Join the network, and broadcast that this node possibly has files to share.
+	 */
+	public void JoinNetwork()
+	{
+		
+	}
 	
+	public void LeaveNetwork()
+	{
+		
+	}
+	
+	/**
+	 * Finds neighbors to directly connect to, perhaps utilizing some structure or a mesh.  
+	 */
+	public void FindNeighbors()
+	{
+		
+	}
+	
+	/**
+	 * Listens for additional nodes joining, files updating, or messages being passed through(?)
+	 */
+	//Not sure about this one, thoughts? -Tyler
+	public void ListenForEvents()
+	{
+		
+	}
+	/**
+	 * Figure out if there are any files on the network that the node is missing, then download them, adding them to the localFiles list.
+	 * Conflict handling may occur here as helper functions.
+	 * This should happen as the result of an event.
+	 */
+	public void UpdateLocalFiles()
+	{
+		
+	}
 	
 }
