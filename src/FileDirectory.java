@@ -14,7 +14,13 @@ public class FileDirectory
 		FileList = null;
 	}
 	
-	public ArrayList<File> detectFileList(File listFile){
+	/**
+	 * convertFileList converts a Filepath into an ArrayList of 
+	 * files inside of that directory that can be used.
+	 * @param listFile
+	 * @return
+	 */
+	public ArrayList<File> convertFileList(File listFile){
 		ArrayList<File> listOfFiles = new ArrayList<>();
 		File[] temp = listFile.listFiles();
 		for(File files : temp)
