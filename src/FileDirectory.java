@@ -7,6 +7,8 @@ import java.io.*; // Import Java library to handle directories
 
 public class FileDirectory {
 	private ArrayList<File> FileList;
+	private String SourceLocation;
+	private String TargetLocation; 
 	
 	public FileDirectory(){
 		FileList = null;
@@ -35,5 +37,19 @@ public class FileDirectory {
 	public ArrayList<File> getFileList(String directoryToScan){
 		File toScan = new File(directoryToScan);
 		return convertFileList(toScan);
+	}
+
+	/**
+	 * Outputs an agnostic file list that is useful for examining the files
+	 * in the source/target sections.
+	 * @param directoryList
+	 * @return
+	 */
+	public ArrayList<String> processFileList(ArrayList<File> directoryList){
+		ArrayList<String> listOfFiles = new ArrayList<>();
+		for(File files: directoryList) {
+			listOfFiles.add(files.getAbsolutePath().substring(SourceLocation.length()));
+		}
+		return listOfFiles;
 	}
 }
