@@ -13,5 +13,15 @@ public class FileDirectory
 	{
 		FileList = null;
 	}
+	
+	public ArrayList<File> detectFileList(File listFile){
+		ArrayList<File> listOfFiles = new ArrayList<>();
+		File[] temp = listFile.listFiles();
+		for(File files : temp)
+		{
+			listOfFiles.add(files);
+		}
+		return listOfFiles;
+	}
 
 }
