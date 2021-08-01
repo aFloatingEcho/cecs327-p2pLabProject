@@ -24,7 +24,7 @@ public class Node
 	private ArrayList<Node> neighboringNodes;
 	
 	/**Timestamp for the purposes of determining which node is the oldest.*/
-	Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+	Timestamp timestamp;
 	
 	/** We need a socket each for Push and Pull functions.
 	 * An unassigned port we could use is 55555.*/
@@ -39,6 +39,7 @@ public class Node
 		neighboringNodes = null;
 		pushSocket = null;
 		pullSocket = null;
+		this.timestamp = new Timestamp(System.currentTimeMillis());
 	}
 	
 	/**
@@ -85,6 +86,13 @@ public class Node
 	}
 	
 	/**
+	 * Connect to a peer for the purposes of file sharing
+	 */
+	public void ConnectToPeer()
+	{
+		
+	}
+	/**
 	 * Listens for additional nodes joining, files updating, or messages being passed through(?)
 	 */
 	//Not sure about this one, thoughts? -Tyler
@@ -100,6 +108,11 @@ public class Node
 	public void UpdateLocalFiles()
 	{
 		
+	}
+	
+	public Timestamp GetTimeStamp()
+	{
+		return this.timestamp;
 	}
 	
 }
