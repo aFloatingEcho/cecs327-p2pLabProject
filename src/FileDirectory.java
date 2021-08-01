@@ -11,7 +11,7 @@ public class FileDirectory {
 	private String TargetLocation; 
 	
 	public FileDirectory(){
-		FileList = null;
+		this.FileList = new ArrayList<File>();
 	}
 	
 	/**
@@ -59,12 +59,12 @@ public class FileDirectory {
 	 * @param destinationLocation
 	 * @return boolean value, true if it needs to be replaced, else false if it doesn't.
 	 */
-	public boolean determineShouldBeReplaced(String sourceLocation, String destinationLocation) {
+	public boolean determineShouldBeReplaced(String sourceFile, String destinationFile) {
 		// Attempt to check if a preexisting file exists.
 		try {
-			if(new File(destinationLocation).exists()) {
+			if(new File(destinationFile).exists()) {
 				// Determine if the destination file is older than the source location.
-				if(new File(sourceLocation).lastModified() > new File(destinationLocation).lastModified()) {
+				if(new File(sourceFile).lastModified() > new File(destinationFile).lastModified()) {
 					return true;
 				}
 				else {
