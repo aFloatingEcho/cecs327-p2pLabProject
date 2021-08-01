@@ -45,7 +45,7 @@ public class Node
 	/**
 	 * Join the network, and broadcast that this node possibly has files to share.
 	 */
-	public void JoinNetwork()
+	public void joinNetwork()
 	{
 		//Create a new ServerSocket for outbound traffic, binding it to a port.
 		//Then create a new Socket for inbound traffic, to be connected later.  
@@ -63,7 +63,7 @@ public class Node
 	/**
 	 * Leave the network, closing any open connections and ports.
 	 */
-	public void LeaveNetwork()
+	public void leaveNetwork()
 	{
 		//close connections
 		try {
@@ -80,7 +80,7 @@ public class Node
 	/**
 	 * Finds neighbors to directly connect to, perhaps utilizing some structure or a mesh.  
 	 */
-	public void FindNeighbors()
+	public void findNeighbors()
 	{
 		
 	}
@@ -88,7 +88,7 @@ public class Node
 	/**
 	 * Connect to a peer for the purposes of file sharing
 	 */
-	public void ConnectToPeer()
+	public void connectToPeer()
 	{
 		
 	}
@@ -96,7 +96,7 @@ public class Node
 	 * Listens for additional nodes joining, files updating, or messages being passed through(?)
 	 */
 	//Not sure about this one, thoughts? -Tyler
-	public void ListenForEvents()
+	public void listenForEvents()
 	{
 		
 	}
@@ -105,12 +105,12 @@ public class Node
 	 * Conflict handling may occur here as helper functions.
 	 * This should happen as the result of an event.
 	 */
-	public void UpdateLocalFiles()
+	public void updateLocalFiles()
 	{
 		
 	}
 	
-	public Timestamp GetTimeStamp()
+	public Timestamp getTimeStamp()
 	{
 		return this.timestamp;
 	}
