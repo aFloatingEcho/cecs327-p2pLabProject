@@ -48,16 +48,16 @@ public class Node
 	public void joinNetwork()
 	{
 		//Create a new ServerSocket for outbound traffic, binding it to a port.
-		//Then create a new Socket for inbound traffic, to be connected later.  
 		try 
 		{
 			pushSocket = new ServerSocket(pushPort);
-			pullSocket = new Socket();
 		} 
 		catch (IOException e) 
 		{
 			System.out.println("Error opening port");
 		}
+		//Upon joining, push new files out to other nodes
+		//Then, download other files
 	}
 	
 	/**
@@ -90,7 +90,14 @@ public class Node
 	 */
 	public void connectToPeer()
 	{
-		
+		try 
+		{
+			pullSocket = pushSocket.accept();
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("Connection failed.");
+		}
 	}
 	/**
 	 * Listens for additional nodes joining, files updating, or messages being passed through(?)
