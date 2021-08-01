@@ -1,4 +1,6 @@
 import java.io.File;
+import java.io.IOException;
+import java.net.*;
 import java.sql.Timestamp;
 import java.time.*;
 import java.util.ArrayList;
@@ -24,11 +26,19 @@ public class Node
 	/**Timestamp for the purposes of determining which node is the oldest.*/
 	Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 	
+	/** We need a socket each for Push and Pull functions.
+	 * An unassigned port we could use is 55555.*/
+	ServerSocket pushSocket;
+	Socket pullSocket;
+	private int pushPort = 55555;
+	
 	//Currently dummy constructor
 	public Node()
 	{
 		localFiles = null;
 		neighboringNodes = null;
+		pushSocket = null;
+		pullSocket = null;
 	}
 	
 	/**
@@ -36,11 +46,33 @@ public class Node
 	 */
 	public void JoinNetwork()
 	{
-		
+		//Create a new ServerSocket for outbound traffic, binding it to a port.
+		//Then create a new Socket for inbound traffic, to be connected later.  
+		try 
+		{
+			pushSocket = new ServerSocket(pushPort);
+			pullSocket = new Socket();
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("Error opening port");
+		}
 	}
 	
+	/**
+	 * Leave the network, closing any open connections and ports.
+	 */
 	public void LeaveNetwork()
 	{
+		//close connections
+		try {
+			pushSocket.close();
+			pullSocket.close();
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("Error closing port");
+		}
 		
 	}
 	
