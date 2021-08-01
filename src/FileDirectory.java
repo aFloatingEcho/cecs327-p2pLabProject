@@ -52,4 +52,28 @@ public class FileDirectory {
 		}
 		return listOfFiles;
 	}
+	
+	/**
+	 * Determines if a file needs to be transfered from the source to the destination.
+	 * @param sourceLocation
+	 * @param destinationLocation
+	 * @return boolean value, true if it needs to be replaced, else false if it doesn't.
+	 */
+	public boolean determineShouldBeReplaced(String sourceLocation, String destinationLocation) {
+		// Attempt to check if a preexisting file exists.
+		try {
+			if(new File(destinationLocation).exists()) {
+				// Determine if the destination file is older than the source location.
+				if(new File(sourceLocation).lastModified() > new File(destinationLocation).lastModified()) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		} catch(Exception IOError){
+			return true;
+		}
+		return true;
+	}
 }
