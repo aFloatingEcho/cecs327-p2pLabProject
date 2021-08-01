@@ -6,12 +6,18 @@ import java.util.ArrayList; // Import Java ArrayList in order to handle file lis
 import java.io.*; // Import Java library to handle directories
 
 public class FileDirectory {
-	private ArrayList<File> FileList;
-	private String SourceLocation;
-	private String TargetLocation; 
+	// To make things easier, we refer location in the main scope
+	// and directory when setting up arguments.
+	private ArrayList<File> fileList;
+	private ArrayList<String> listToScan;
+	private String sourceLocation;
+	private String targetLocation; 
 	
-	public FileDirectory(){
-		this.FileList = new ArrayList<File>();
+	public FileDirectory(String sourceDirectory, String targetDirectory){
+		this.sourceLocation = sourceDirectory;
+		this.targetLocation = targetDirectory;
+		this.fileList = this.getFileList(this.sourceLocation);
+		this.listToScan = this.processFileList(this.fileList);
 	}
 	
 	/**
@@ -48,7 +54,7 @@ public class FileDirectory {
 	public ArrayList<String> processFileList(ArrayList<File> directoryList){
 		ArrayList<String> listOfFiles = new ArrayList<>();
 		for(File files: directoryList) {
-			listOfFiles.add(files.getAbsolutePath().substring(SourceLocation.length()));
+			listOfFiles.add(files.getAbsolutePath().substring(this.sourceLocation.length()));
 		}
 		return listOfFiles;
 	}
