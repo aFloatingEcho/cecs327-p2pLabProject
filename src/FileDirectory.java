@@ -105,4 +105,26 @@ public class FileDirectory {
 			System.out.println(sourceFile + " already exists in " + destinationFile);
 		}
 	}
+	
+	/**
+	 * Getters of information of the files in the source directory.
+	 * @return
+	 */
+	public ArrayList<String> getFileList(){
+		return this.listToScan;
+	}
+	/**
+	 * Getters of information of the source directory.
+	 * @return
+	 */
+	public String getSourceDirectory() {
+		return this.sourceLocation;
+	}
+	/**
+	 * Getters of information of the target directory.
+	 * @return
+	 */
+	public String getTargetDirectory() {
+		return this.targetLocation;
+	}
 }
