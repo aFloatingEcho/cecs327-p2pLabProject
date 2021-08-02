@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class Node 
 {
-	
+	private String id;
 	/** The files local to this machine we wish to sync.  Directory should be specified in the constructor.  */ 
 	//Perhaps change this to a List<File>?
 	private ArrayList<File> localFiles;
@@ -33,9 +33,13 @@ public class Node
 	private Socket pullSocket;
 	private static int pushPort = 55555;
 	
-	//Currently dummy constructor
-	public Node()
+	/**
+	 * Creates and initializes a new Node with a String identifier
+	 * @param id This node's identifier
+	 */
+	public Node(String id)
 	{	
+		this.id = id;
 		localFiles = null;
 		neighboringNodes = null;
 		pushSocket = null;
@@ -67,7 +71,7 @@ public class Node
 	 */
 	public void leaveNetwork()
 	{
-		//close connections
+		//close sockets
 		try {
 			pushSocket.close();
 			pullSocket.close();
@@ -76,6 +80,9 @@ public class Node
 		{
 			System.out.println("Error closing port");
 		}
+		
+		//eliminate neighbors
+		neighboringNodes = null;
 		
 	}
 	
@@ -87,6 +94,10 @@ public class Node
 		
 	}
 	
+	public void connectAndSendMessage(String targetID)
+	{
+		
+	}
 	/**
 	 * Connect to a peer for the purposes of file sharing
 	 */
