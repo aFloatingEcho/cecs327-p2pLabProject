@@ -4,6 +4,7 @@
 
 import java.util.ArrayList; // Import Java ArrayList in order to handle file lists.
 import java.io.*; // Import Java library to handle directories
+import java.nio.file.Files;
 
 public class FileDirectory {
 	// To make things easier, we refer location in the main scope
@@ -81,5 +82,49 @@ public class FileDirectory {
 			return true;
 		}
 		return true;
+	}
+	
+	/**
+	 * Copies a file, raises an exception if it encounters an issue.
+	 * @param sourceFile
+	 * @param destinationFile
+	 * @return
+	 */
+	public void copyFiles(String sourceFile, String destinationFile) {
+		if(this.determineShouldBeReplaced(sourceFile, destinationFile)) {
+			File fileToCopy = new File(sourceFile);
+			File fileTarget = new File(destinationFile);
+			try {
+				Files.copy(fileToCopy.toPath(), fileTarget.toPath());
+			} catch(Exception IOError) {
+				System.out.println("Failure to copy: " + fileToCopy.toString());
+				System.out.println(IOError.getMessage());
+			}
+		}
+		else {
+			System.out.println(sourceFile + " already exists in " + destinationFile);
+		}
+	}
+	
+	/**
+	 * Getters of information of the files in the source directory.
+	 * @return
+	 */
+	public ArrayList<String> getFileList(){
+		return this.listToScan;
+	}
+	/**
+	 * Getters of information of the source directory.
+	 * @return
+	 */
+	public String getSourceDirectory() {
+		return this.sourceLocation;
+	}
+	/**
+	 * Getters of information of the target directory.
+	 * @return
+	 */
+	public String getTargetDirectory() {
+		return this.targetLocation;
 	}
 }
