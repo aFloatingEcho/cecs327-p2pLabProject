@@ -62,6 +62,7 @@ public class Node
 		{
 			System.out.println("Error opening port");
 		}
+		this.findNeighbors();
 		//Upon joining, push new files out to other nodes
 		//Then, download other files
 	}
@@ -88,20 +89,25 @@ public class Node
 	
 	/**
 	 * Finds neighbors to directly connect to, perhaps utilizing some structure or a mesh.  
+	 * Search for any node also running this program, then ask it for any nodes it knows and add to the list.
 	 */
 	public void findNeighbors()
 	{
 		
 	}
 	
+	/**
+	 * Connect and send a message to a targeted node
+	 * @param targetID The ID of the target node; the intended recipient
+	 */
 	public void connectAndSendMessage(String targetID)
 	{
-		
+		connectToPeer(targetID);
 	}
 	/**
 	 * Connect to a peer for the purposes of file sharing
 	 */
-	public void connectToPeer()
+	public void connectToPeer(String targetID)
 	{
 		try 
 		{
