@@ -15,6 +15,7 @@ import java.util.ArrayList;
  */
 public class Node 
 {
+	
 	/** The files local to this machine we wish to sync.  Directory should be specified in the constructor.  */ 
 	//Perhaps change this to a List<File>?
 	private ArrayList<File> localFiles;
@@ -24,17 +25,17 @@ public class Node
 	private ArrayList<Node> neighboringNodes;
 	
 	/**Timestamp for the purposes of determining which node is the oldest.*/
-	Timestamp timestamp;
+	private Timestamp timestamp;
 	
 	/** We need a socket each for Push and Pull functions.
 	 * An unassigned port we could use is 55555.*/
-	ServerSocket pushSocket;
-	Socket pullSocket;
-	private int pushPort = 55555;
+	private ServerSocket pushSocket;
+	private Socket pullSocket;
+	private static int pushPort = 55555;
 	
 	//Currently dummy constructor
 	public Node()
-	{
+	{	
 		localFiles = null;
 		neighboringNodes = null;
 		pushSocket = null;
@@ -50,6 +51,7 @@ public class Node
 		//Create a new ServerSocket for outbound traffic, binding it to a port.
 		try 
 		{
+			//There is another constructor that can limit how many incoming transmissions can be queued, if we deem that necessary.
 			pushSocket = new ServerSocket(pushPort);
 		} 
 		catch (IOException e) 
