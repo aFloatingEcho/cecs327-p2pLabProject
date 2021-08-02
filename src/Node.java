@@ -5,8 +5,6 @@ import java.sql.Timestamp;
 import java.time.*;
 import java.util.ArrayList;
 
-import Network.NetworkManager;
-
 /**
  * A Node on our Peer to Peer Network.  Should begin with a list of local files from a given directory.
  * Needs to discover and connect to other nodes on the network, then sync files together so they all have the same contents.
@@ -17,7 +15,7 @@ import Network.NetworkManager;
  */
 public class Node 
 {
-	private NetworkManager networkManager;
+	private String id;
 	/** The files local to this machine we wish to sync.  Directory should be specified in the constructor.  */ 
 	//Perhaps change this to a List<File>?
 	private ArrayList<File> localFiles;
@@ -36,12 +34,12 @@ public class Node
 	private static int pushPort = 55555;
 	
 	/**
-	 * Creates and initializes a new Node with a NetworkManager to identify it
+	 * Creates and initializes a new Node with a String identifier
 	 * @param id This node's identifier
 	 */
-	public Node()
+	public Node(String id)
 	{	
-		this.networkManager = new NetworkManager();
+		this.id = id;
 		localFiles = null;
 		neighboringNodes = null;
 		pushSocket = null;
@@ -65,8 +63,8 @@ public class Node
 			System.out.println("Error opening port");
 		}
 		this.findNeighbors();
-		//Upon joining, download new files from nodes
-		//Then, push files to other nodes
+		//Upon joining, push new files out to other nodes
+		//Then, download other files
 	}
 	
 	/**
