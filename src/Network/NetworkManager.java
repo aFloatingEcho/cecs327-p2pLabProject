@@ -34,7 +34,7 @@ public class NetworkManager {
 	}
 	
 	/**
-	 * Function that cycles through all itnerfaces of a System.
+	 * Function that cycles through all interfaces of a System.
 	 * @return
 	 * @throws InterruptedException
 	 */
