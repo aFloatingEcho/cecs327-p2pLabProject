@@ -16,14 +16,6 @@ public class NetworkManager {
 	private String HOST;
 	
 	/**
-	 * Debug
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		System.out.print("NETWORK");
-	}
-	
-	/**
 	 * Default Constructor for this machine's host name and address
 	 */
 	public NetworkManager() {
