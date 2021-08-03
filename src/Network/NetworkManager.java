@@ -56,6 +56,11 @@ public class NetworkManager {
 	 */
 	public List<String> getLocalIPAddresses(InetAddress networkAddress) throws InterruptedException {
 		List<String> localIPs = new ArrayList<>();
+		// Break this function if it turns out that we are on a loopback address.
+		if(networkAddress.isLoopbackAddress() == true) {
+			System.out.println("Is loopback, will not attempt to find addresses.");
+			return localIPs;
+		}
 		final byte[] ip = networkAddress.getAddress();
 		ExecutorService es = Executors.newFixedThreadPool(255);   // 255 = threads per network address
 		for(int i = 1; i < 255; ++i) {
