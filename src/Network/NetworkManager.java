@@ -40,13 +40,27 @@ public class NetworkManager {
 	 */
 	public List<String> getAllLocalIPAddresses() throws InterruptedException{
 		List<String> allLocalIPs = new ArrayList<>();
+		ExecutorService es = Executors.newCachedThreadPool(); 
 		for(NetworkInterface eachAddress : Collections.list(this.INET)) {
-			Enumeration<InetAddress> NetworkAddresses = eachAddress.getInetAddresses();
-			System.out.println("Finding All Addresses on " + eachAddress.getDisplayName() + " on " + eachAddress);
-			for(InetAddress networkAddress : Collections.list(NetworkAddresses)) {
-				allLocalIPs.addAll(this.getLocalIPAddresses(networkAddress));
-			}
+			es.submit(new Thread(new Runnable() {
+				@Override
+				public void run() {
+					Enumeration<InetAddress> NetworkAddresses = eachAddress.getInetAddresses();
+					System.out.println("Finding All Addresses on " + eachAddress.getDisplayName() + " on " + eachAddress);
+					for(InetAddress networkAddress : Collections.list(NetworkAddresses)) {
+						try {
+							allLocalIPs.addAll(NetworkManager.getLocalIPAddresses(networkAddress));
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}));
+			
 		}
+		es.awaitTermination(11000L, TimeUnit.MILLISECONDS);
+		es.shutdown();
 		return allLocalIPs;
 	}
 	
@@ -54,7 +68,7 @@ public class NetworkManager {
 	 * Returns list of all local IP addresses for a particular interface
 	 * @return List<String>
 	 */
-	public List<String> getLocalIPAddresses(InetAddress networkAddress) throws InterruptedException {
+	public static List<String> getLocalIPAddresses(InetAddress networkAddress) throws InterruptedException {
 		List<String> localIPs = new ArrayList<>();
 		// Break this function if it turns out that we are on a loopback address.
 		if(networkAddress.isLoopbackAddress() == true) {
@@ -74,7 +88,7 @@ public class NetworkManager {
 						String localIP = address.toString().substring(1);   // instantiates the string value of the address
 						if (address.isReachable(5000)) {
 							localIPs.add(localIP);
-							System.out.println(localIP + " is on the network");
+							System.out.println(localIP + " is on the network (" + networkAddress + ")");
 						}
 					} catch (Exception e) {
 //						e.printStackTrace();
