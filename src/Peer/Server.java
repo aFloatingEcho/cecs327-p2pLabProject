@@ -49,7 +49,11 @@ public class Server {
     public void join(ArrayList<String> localIPs) throws IOException {
         for(String address : localIPs) {
             // NOTE: (IDK) this does not cover for Gavin's multiple addresses for one machine solution
+            // deprecated
             mcSocketGroup.joinGroup(InetAddress.getByName(address));
+            // alternative, joinGroup(SocketAddress, NetworkInterface), InetSocketAddress extends SocketAddress
+            mcSocketGroup.joinGroup(new InetSocketAddress(InetAddress.getByName(address), 5555), // or PORT
+                    NetworkInterface.getByInetAddress(InetAddress.getByName(address)));
         }
     }
 
@@ -62,6 +66,7 @@ public class Server {
         //       possibly useful for message to a peer that files were sent
         byte[] buffer = new byte[1000];
         DatagramPacket recv = new DatagramPacket(buffer, buffer.length);
+        // NOTE: receive is an inherited method from DatagramSocket
         mcSocketGroup.receive(recv);
     }
 }
