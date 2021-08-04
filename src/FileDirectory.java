@@ -82,6 +82,23 @@ public class FileDirectory {
 		return true;
 	}
 	
+	public boolean doesFileExist(String FileName) {
+		return(new File(sourceLocation + FileName).exists());
+	}
+	
+	public BufferedOutputStream returnFile(String FileName) {
+		File fileToCopy = null;
+		FileOutputStream fileToReturn = null;
+		BufferedOutputStream returnContents = null;
+		try {
+			fileToCopy = new File(this.sourceLocation + FileName);
+			fileToReturn = new FileOutputStream(fileToCopy);
+			returnContents = new BufferedOutputStream(fileToReturn);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return returnContents;
+	}
 	
 	/**
 	 * Getters of information of the files in the source directory.
