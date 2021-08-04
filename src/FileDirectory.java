@@ -11,11 +11,11 @@ public class FileDirectory {
 	// and directory when setting up arguments.
 	private ArrayList<File> fileList;
 	private ArrayList<String> listToScan;
-	private String sourceLocation;
+	private File sourceLocation;
 	
 	public FileDirectory(String sourceDirectory){
-		this.sourceLocation = sourceDirectory;
-		this.fileList = this.getFileList(this.sourceLocation);
+		this.sourceLocation = new File(sourceDirectory);
+		this.fileList = this.convertFileList(this.sourceLocation);
 		this.listToScan = this.processFileList(this.fileList);
 	}
 	
@@ -35,16 +35,6 @@ public class FileDirectory {
 	}
 
 	/**
-	 * Scans a directory via passed fileString
-	 * @param directoryToScan
-	 * @return
-	 */
-	public ArrayList<File> getFileList(String directoryToScan){
-		File toScan = new File(directoryToScan);
-		return convertFileList(toScan);
-	}
-
-	/**
 	 * Outputs an agnostic file list that is useful for examining the files
 	 * in the source/target sections.
 	 * @param directoryList
@@ -53,7 +43,7 @@ public class FileDirectory {
 	public ArrayList<String> processFileList(ArrayList<File> directoryList){
 		ArrayList<String> listOfFiles = new ArrayList<>();
 		for(File files: directoryList) {
-			listOfFiles.add(files.getAbsolutePath().substring(this.sourceLocation.length()));
+			listOfFiles.add(files.getAbsolutePath().substring(this.sourceLocation.getAbsolutePath().length()));
 		}
 		return listOfFiles;
 	}
@@ -83,7 +73,9 @@ public class FileDirectory {
 	}
 	
 	public boolean doesFileExist(String FileName) {
-		return(new File(sourceLocation + FileName).exists());
+		File toTest = new File(this.sourceLocation.getAbsoluteFile() + FileName);
+		boolean toReturn = toTest.exists();
+		return toReturn;
 	}
 	
 	public BufferedOutputStream returnFile(String FileName) {
@@ -91,7 +83,7 @@ public class FileDirectory {
 		FileOutputStream fileToReturn = null;
 		BufferedOutputStream returnContents = null;
 		try {
-			fileToCopy = new File(this.sourceLocation + FileName);
+			fileToCopy = new File(this.sourceLocation.getAbsolutePath() + FileName);
 			fileToReturn = new FileOutputStream(fileToCopy);
 			returnContents = new BufferedOutputStream(fileToReturn);
 		} catch (FileNotFoundException e) {
@@ -112,6 +104,13 @@ public class FileDirectory {
 	 * @return
 	 */
 	public String getSourceDirectory() {
-		return this.sourceLocation;
+		return this.sourceLocation.getAbsolutePath();
+	}
+	/**
+	 * Getters of the actual Filelist.
+	 * @return
+	 */
+	public ArrayList<File> getActualFileList(){
+		return this.fileList;
 	}
 }
