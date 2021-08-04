@@ -6,6 +6,7 @@ import java.time.*;
 import java.util.ArrayList;
 
 import Network.NetworkManager;
+import Peer.*;
 
 /**
  * A Node on our Peer to Peer Network.  Should begin with a list of local files from a given directory.
@@ -20,6 +21,9 @@ public class Node
 	
 	//private FileDirectory fileDirectory;
 	private NetworkManager networkManager;
+
+	private final Client client;
+	private final Server server;
 	
 	/** The files local to this machine we wish to sync.  Directory should be specified in the constructor.  */ 
 	//Perhaps change this to a List<File>?  Perhaps unneccesary?
@@ -45,6 +49,9 @@ public class Node
 	public Node()
 	{
 		this.networkManager = new NetworkManager();
+		this.client = new Client();
+		this.server = new Server();
+
 		//localFiles = null;
 		neighboringNodes = null;
 		pushSocket = null;
@@ -57,19 +64,25 @@ public class Node
 	 */
 	public void joinNetwork()
 	{
-		//Create a new ServerSocket for outbound traffic, binding it to a port.
-		try 
-		{
-			//There is another constructor that can limit how many incoming transmissions can be queued, if we deem that necessary.
-			pushSocket = new ServerSocket(pushPort);
-		} 
-		catch (IOException e) 
-		{
-			System.out.println("Error opening port");
+//		//Create a new ServerSocket for outbound traffic, binding it to a port.
+//		try
+//		{
+//			//There is another constructor that can limit how many incoming transmissions can be queued, if we deem that necessary.
+//			pushSocket = new ServerSocket(pushPort);
+//		}
+//		catch (IOException e)
+//		{
+//			System.out.println("Error opening port");
+//		}
+//		this.findNeighbors();
+//		//Upon joining, push new files out to other nodes
+//		//Then, download other files
+
+		try {
+			server.join(networkManager.getAllLocalIPAddresses());
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
 		}
-		this.findNeighbors();
-		//Upon joining, push new files out to other nodes
-		//Then, download other files
 	}
 	
 	/**
@@ -77,19 +90,20 @@ public class Node
 	 */
 	public void leaveNetwork()
 	{
-		//close sockets
-		try {
-			pushSocket.close();
-			pullSocket.close();
-		} 
-		catch (IOException e) 
-		{
-			System.out.println("Error closing port");
-		}
-		
-		//eliminate neighbors
-		neighboringNodes = null;
-		
+//		//close sockets
+//		try {
+//			pushSocket.close();
+//			pullSocket.close();
+//		}
+//		catch (IOException e)
+//		{
+//			System.out.println("Error closing port");
+//		}
+//
+//		//eliminate neighbors
+//		neighboringNodes = null;
+
+		client.leave(server.getMcSocketGroup());
 	}
 	
 	/**
@@ -98,7 +112,7 @@ public class Node
 	 */
 	public void findNeighbors()
 	{
-		
+		// NOTE: out of scope of this class, NetworkManager handles this action
 	}
 	
 	/**
@@ -107,30 +121,43 @@ public class Node
 	 */
 	public void connectAndSendMessage(String targetID)
 	{
-		connectToPeer(targetID);
+		// NOTE: this should broadcast to multiple peers in the network
+		//       whether a peer chooses to receive what was sent is their decision
+		connectToPeer(targetID, null);
 	}
+
+	// NOTE: this may not be necessary since our goal is to be connected to devices found on the network
+	//       not to a device which we must manually input
+	//       nonetheless, there is a join method in the Client class to join a pre-existing network
 	/**
 	 * Connect to a peer for the purposes of file sharing
 	 */
-	public void connectToPeer(String targetID)
+	public void connectToPeer(String targetID, MulticastSocket mcSocket)
 	{
-		try 
+		// need to connect to multiple peers, or connect this machine to a network of peers
+		try
 		{
-			pullSocket = pushSocket.accept();
-		} 
-		catch (IOException e) 
+//			pullSocket = pushSocket.accept();
+
+			// a client may be joined to multiple multicast sockets
+			client.join(mcSocket);
+		}
+		catch (IOException e)
 		{
 			System.out.println("Connection failed.");
 		}
 	}
+
 	/**
 	 * Listens for additional nodes joining, files updating, or messages being passed through(?)
 	 */
 	//Not sure about this one, thoughts? -Tyler
+	// Yea, I don't think we need this one, seems like a FileDirectory action. -James
 	public void listenForEvents()
 	{
-		
+		// NOTE: this action should be handled by the FileDirectory class
 	}
+
 	/**
 	 * Figure out if there are any files on the network that the node is missing, then download them, adding them to the localFiles list.
 	 * Conflict handling may occur here as helper functions.
@@ -138,7 +165,7 @@ public class Node
 	 */
 	public void updateLocalFiles()
 	{
-		
+		// NOTE: this action should be handled by the FileDirectory class
 	}
 	
 	public Timestamp getTimeStamp()

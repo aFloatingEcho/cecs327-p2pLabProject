@@ -7,27 +7,36 @@ import java.util.ArrayList;
 
 public class Client {
     // NOTE: may not need these b/c socket is the same and port should be kept at small scale right now
-//    private final int PORT;   // port used for sending commands
-//    private final Socket SOCKET;   // socket use for transferring commands
+    private final int PORT;   // port used for sending commands
+    private final Socket SOCKET;   // socket use for transferring commands
 
     /**
      * Default constructor
      */
-    public Client() {}
+    public Client() {
+        this.PORT = 5555;
+        this.SOCKET = new Socket();
+    }
 
     // NOTE: may not need all these constructors
     /**
      * Overloaded constructor for specified port number
      * @param port int
      */
-    public Client(int port) {}
+    public Client(int port) {
+        this.PORT = port;
+        this.SOCKET = new Socket();
+    }
 
     /**
      * Overloaded constructor for specified port number and Socket
      * @param port int
      * @param socket Socket
      */
-    public Client(int port, Socket socket) {}
+    public Client(int port, Socket socket) {
+        this.PORT = port;
+        this.SOCKET = socket;
+    }
 
     /**
      * Join to the specified MulticastSocket

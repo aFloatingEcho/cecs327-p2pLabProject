@@ -3,17 +3,18 @@ package Peer;
 import java.io.IOException;
 import java.net.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Server {
     // NOTE: may not need this port should be kept at small scale right now
-//    private final int PORT;
+    private final int PORT;
     private MulticastSocket mcSocketGroup;   // need for multiple peers connected to one socket
 
     /**
      * Default constructor
      */
     public Server() {
+        this.PORT = 5555;
         try {
             mcSocketGroup = new MulticastSocket(5555); // or PORT
         } catch(Exception e) {
@@ -26,9 +27,9 @@ public class Server {
      * @param port int
      */
     public Server(int port) {
+        this.PORT = port;
         try {
-//            PORT = port;
-            mcSocketGroup = new MulticastSocket(port); // or PORT
+            mcSocketGroup = new MulticastSocket(PORT);
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -36,17 +37,18 @@ public class Server {
 
     /**
      * Overload constructor for a pre-existing MulticastSocket
-     * @param mcsocket MulticastSocket
+     * @param mcSocket MulticastSocket
      */
-    public Server(MulticastSocket mcsocket) {
-        mcSocketGroup = mcsocket;
+    public Server(MulticastSocket mcSocket) {
+        this.PORT = mcSocket.getPort();
+        mcSocketGroup = mcSocket;
     }
 
     /**
      * Joins all available IP addresses to the MulticastSocket
      * @param localIPs ArrayList<String>
      */
-    public void join(ArrayList<String> localIPs) throws IOException {
+    public void join(List<String> localIPs) throws IOException {
         for(String address : localIPs) {
             // NOTE: (IDK) this does not cover for Gavin's multiple addresses for one machine solution
             // deprecated
@@ -68,5 +70,9 @@ public class Server {
         DatagramPacket recv = new DatagramPacket(buffer, buffer.length);
         // NOTE: receive is an inherited method from DatagramSocket
         mcSocketGroup.receive(recv);
+    }
+
+    public MulticastSocket getMcSocketGroup() {
+        return mcSocketGroup;
     }
 }
