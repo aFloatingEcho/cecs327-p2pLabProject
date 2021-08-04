@@ -1,5 +1,8 @@
 package Peer;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.MulticastSocket;
 
@@ -33,12 +36,36 @@ public class Client {
      * Join to the specified MulticastSocket
      * @param mcSocket MulticastSocket
      */
-    public void join(MulticastSocket mcSocket) {}
+    public void join(MulticastSocket mcSocket) throws IOException {
+        // NOTE: this does not cover for Gavin's multiple addresses for one machine solution
+        mcSocket.joinGroup(InetAddress.getLocalHost());
+    }
 
     /**
      * Send commands to other peers
+     * Returns true if successful, else false
+     * @return boolean
      */
-    public void send() {}
+    public boolean send(MulticastSocket mcSocket) {
+        // NOTE: FileDirectory/Stream stuff should be called here then the respective classes will do the magic
+        //       and may want to use Threads in here or whatever class will be calling this method
+        return false;
+    }
+
+    /**
+     * The current client leaves the MulticastSocket group
+     * Return true if successful, else false
+     * @return boolean
+     */
+    public boolean leave(MulticastSocket mcSocket) {
+        try {
+            mcSocket.leaveGroup(InetAddress.getLocalHost());
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
 //    public int getPORT() {
 //        return PORT;
