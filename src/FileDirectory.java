@@ -12,11 +12,9 @@ public class FileDirectory {
 	private ArrayList<File> fileList;
 	private ArrayList<String> listToScan;
 	private String sourceLocation;
-	private String targetLocation; 
 	
-	public FileDirectory(String sourceDirectory, String targetDirectory){
+	public FileDirectory(String sourceDirectory){
 		this.sourceLocation = sourceDirectory;
-		this.targetLocation = targetDirectory;
 		this.fileList = this.getFileList(this.sourceLocation);
 		this.listToScan = this.processFileList(this.fileList);
 	}
@@ -62,16 +60,16 @@ public class FileDirectory {
 	
 	/**
 	 * Determines if a file needs to be transfered from the source to the destination.
-	 * @param sourceLocation
+	 * @param replacementAge long variable that indicates the time since the file has been replaced
 	 * @param destinationLocation
 	 * @return boolean value, true if it needs to be replaced, else false if it doesn't.
 	 */
-	public boolean determineShouldBeReplaced(String sourceFile, String destinationFile) {
+	public boolean determineShouldBeReplaced(long replacementAge, String destinationFile) {
 		// Attempt to check if a preexisting file exists.
 		try {
 			if(new File(destinationFile).exists()) {
 				// Determine if the destination file is older than the source location.
-				if(new File(sourceFile).lastModified() > new File(destinationFile).lastModified()) {
+				if(replacementAge > new File(destinationFile).lastModified()) {
 					return true;
 				}
 				else {
@@ -119,12 +117,5 @@ public class FileDirectory {
 	 */
 	public String getSourceDirectory() {
 		return this.sourceLocation;
-	}
-	/**
-	 * Getters of information of the target directory.
-	 * @return
-	 */
-	public String getTargetDirectory() {
-		return this.targetLocation;
 	}
 }
