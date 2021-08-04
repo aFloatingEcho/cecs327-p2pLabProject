@@ -59,7 +59,7 @@ public class NetworkManager {
 			}));
 			
 		}
-		es.awaitTermination(11000L, TimeUnit.MILLISECONDS);
+		es.awaitTermination(30000L, TimeUnit.MILLISECONDS);
 		es.shutdown();
 		return allLocalIPs;
 	}
