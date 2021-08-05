@@ -26,6 +26,13 @@ public class FileServer {
 				e.printStackTrace();
 			}
 		}
+		try {
+			String message = "Close";
+			byte[] brokenUp = message.getBytes();
+			serverBroadcast.send(new DatagramPacket(brokenUp, brokenUp.length, this.serverBroadcast.getInetAddress(), this.serverBroadcast.getPort()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void shutdown() {
