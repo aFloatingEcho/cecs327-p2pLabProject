@@ -42,16 +42,18 @@ public class Client {
     }
 
     /**
-     * Join to the specified MulticastSocket
-     * @param mcSocket MulticastSocket
+     * Join to the specified SocketAddress
+     * @param socketAddress SocketAddress
      */
-    public void join(MulticastSocket mcSocket) throws IOException {
+    public void join(SocketAddress socketAddress) throws IOException {
         // NOTE: this does not cover for Gavin's multiple addresses for one machine solution
         // deprecated
         // mcSocket.joinGroup(InetAddress.getLocalHost());
         // alternative, joinGroup(SocketAddress, NetworkInterface), InetSocketAddress extends SocketAddress
-        mcSocket.joinGroup(new InetSocketAddress(InetAddress.getLocalHost(), 5555),
-                NetworkInterface.getByInetAddress(InetAddress.getLocalHost()));
+//        mcSocket.joinGroup(new InetSocketAddress(InetAddress.getLocalHost(), 5555),
+//                NetworkInterface.getByInetAddress(InetAddress.getLocalHost()));
+
+        SOCKET.connect(socketAddress);
     }
 
     /**
@@ -59,39 +61,28 @@ public class Client {
      * Returns true if successful, else false
      * @return boolean
      */
-    public boolean send(MulticastSocket mcSocket, File inputFile) {
-        // NOTE: FileDirectory/Stream stuff should be called here then the respective classes will do the magic
-        //       and may want to use Threads in here or whatever class will be calling this method
-    	int fileSize = (int) inputFile.length();
-    	try {
-    		byte[] fileBroken = new byte[fileSize];
-    		DatagramPacket packet = new DatagramPacket(fileBroken, fileBroken.length, mcSocket.getInetAddress(),this.PORT);
-    		mcSocket.send(packet);
-    		return true;
-    	} catch(Exception e) {
-    		System.out.println(e);
-    	}
+    public boolean send(Socket socket, File inputFile) {
         return false;
     }
 
-    /**
-     * The current client leaves the MulticastSocket group
-     * Return true if successful, else false
-     * @return boolean
-     */
-    public boolean leave(MulticastSocket mcSocket) {
-        try {
-            // deprecated
-            // mcSocket.leaveGroup(InetAddress.getLocalHost());
-            // alternative, leaveGroup(SocketAddress, NetworkInterface), InetSocketAddress extends SocketAddress
-            mcSocket.leaveGroup(new InetSocketAddress(InetAddress.getLocalHost(), 5555),
-                    NetworkInterface.getByInetAddress(InetAddress.getLocalHost()));
-        } catch(Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
+//    /**
+//     * The current client leaves the MulticastSocket group
+//     * Return true if successful, else false
+//     * @return boolean
+//     */
+//    public boolean leave(MulticastSocket mcSocket) {
+//        try {
+//            // deprecated
+//            // mcSocket.leaveGroup(InetAddress.getLocalHost());
+//            // alternative, leaveGroup(SocketAddress, NetworkInterface), InetSocketAddress extends SocketAddress
+//            mcSocket.leaveGroup(new InetSocketAddress(InetAddress.getLocalHost(), 5555),
+//                    NetworkInterface.getByInetAddress(InetAddress.getLocalHost()));
+//        } catch(Exception e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//        return true;
+//    }
 
 //    public int getPORT() {
 //        return PORT;

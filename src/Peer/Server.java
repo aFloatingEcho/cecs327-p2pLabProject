@@ -1,6 +1,6 @@
 package Peer;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
 
 import java.util.List;
@@ -8,7 +8,9 @@ import java.util.List;
 public class Server {
     // NOTE: may not need this port should be kept at small scale right now
     private final int PORT;
-    private MulticastSocket mcSocketGroup;   // need for multiple peers connected to one socket
+    private ServerSocket serverSocket;
+
+//    private MulticastSocket mcSocketGroup;   // need for multiple peers connected to one socket
 
     /**
      * Default constructor
@@ -16,7 +18,8 @@ public class Server {
     public Server() {
         this.PORT = 5555;
         try {
-            mcSocketGroup = new MulticastSocket(5555); // or PORT
+            serverSocket = new ServerSocket(PORT);
+
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -29,20 +32,20 @@ public class Server {
     public Server(int port) {
         this.PORT = port;
         try {
-            mcSocketGroup = new MulticastSocket(PORT);
+            serverSocket = new ServerSocket(PORT);
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * Overload constructor for a pre-existing MulticastSocket
-     * @param mcSocket MulticastSocket
-     */
-    public Server(MulticastSocket mcSocket) {
-        this.PORT = mcSocket.getPort();
-        mcSocketGroup = mcSocket;
-    }
+//    /**
+//     * Overload constructor for a pre-existing MulticastSocket
+//     * @param mcSocket MulticastSocket
+//     */
+//    public Server(MulticastSocket mcSocket) {
+//        this.PORT = mcSocket.getPort();
+//        mcSocketGroup = mcSocket;
+//    }
 
     /**
      * Joins all available IP addresses to the MulticastSocket
@@ -53,26 +56,34 @@ public class Server {
             // NOTE: (IDK) this does not cover for Gavin's multiple addresses for one machine solution
             // deprecated
             // mcSocketGroup.joinGroup(InetAddress.getByName(address));
+
             // alternative, joinGroup(SocketAddress, NetworkInterface), InetSocketAddress extends SocketAddress
-            mcSocketGroup.joinGroup(new InetSocketAddress(InetAddress.getByName(address), 5555), // or PORT
-                    NetworkInterface.getByInetAddress(InetAddress.getByName(address)));
+//            mcSocketGroup.joinGroup(new InetSocketAddress(InetAddress.getByName(address), 5555), // or PORT
+//                    NetworkInterface.getByInetAddress(InetAddress.getByName(address)));
+
+            // ServerSocket implementation b/c MulticastSocket is complicated
+            serverSocket.bind(new InetSocketAddress(InetAddress.getByName(address), serverSocket.getLocalPort()));
+            // or keep accepting until no more connection requests
+            receive(serverSocket.accept());
         }
     }
 
     /**
      * Receives any commands sent from another peer
      */
-    public void receive() throws IOException {
-        // NOTE: this code is temporary and is from the Java MulticastSocket documentation
-        //       its purpose for being here to display an example of DatagramPackets
-        //       possibly useful for message to a peer that files were sent
-        byte[] buffer = new byte[1000];
-        DatagramPacket recv = new DatagramPacket(buffer, buffer.length);
-        // NOTE: receive is an inherited method from DatagramSocket
-        mcSocketGroup.receive(recv);
+    public void receive(Socket inbound) throws IOException {
+        // NOTE: input means the message coming INto the server
+        FileInputStream fileInput = (FileInputStream) inbound.getInputStream();   // or can use InputStream
+        BufferedInputStream bufferInput = new BufferedInputStream(fileInput);
+        byte[] bufBytes = new byte[Integer.MAX_VALUE];
+        int bytesRead = bufferInput.read(bufBytes, 0, bufBytes.length);
+
+        // i'll stop here since going any further is out of the scope of this class
+        // however, if we can read commands, this method can possibly be used to read a select file
+        // from another peer who may or may not have the file
     }
 
-    public MulticastSocket getMcSocketGroup() {
-        return mcSocketGroup;
+    public ServerSocket getServerSocket() {
+        return serverSocket;
     }
 }
