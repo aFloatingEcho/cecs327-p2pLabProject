@@ -50,8 +50,9 @@ public class Server {
     /**
      * Joins all available IP addresses to the MulticastSocket
      * @param localIPs ArrayList<String>
+     * @throws InterruptedException 
      */
-    public void join(List<String> localIPs) {
+    public void join(List<String> localIPs) throws InterruptedException {
     	ExecutorService es = Executors.newFixedThreadPool(localIPs.size());
         for(String address : localIPs) {
         	es.submit(new Thread(new Runnable() {
@@ -78,6 +79,8 @@ public class Server {
         		
         	}));
         }
+        es.awaitTermination(10000L, TimeUnit.MILLISECONDS);
+        es.shutdown();
     }
 
     /**
