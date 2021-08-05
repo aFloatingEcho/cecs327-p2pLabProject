@@ -45,7 +45,7 @@ public class Client {
     public void join(MulticastSocket mcSocket) throws IOException {
         // NOTE: this does not cover for Gavin's multiple addresses for one machine solution
         // deprecated
-        mcSocket.joinGroup(InetAddress.getLocalHost());
+        // mcSocket.joinGroup(InetAddress.getLocalHost());
         // alternative, joinGroup(SocketAddress, NetworkInterface), InetSocketAddress extends SocketAddress
         mcSocket.joinGroup(new InetSocketAddress(InetAddress.getLocalHost(), 5555),
                 NetworkInterface.getByInetAddress(InetAddress.getLocalHost()));
@@ -70,7 +70,7 @@ public class Client {
     public boolean leave(MulticastSocket mcSocket) {
         try {
             // deprecated
-            mcSocket.leaveGroup(InetAddress.getLocalHost());
+            // mcSocket.leaveGroup(InetAddress.getLocalHost());
             // alternative, leaveGroup(SocketAddress, NetworkInterface), InetSocketAddress extends SocketAddress
             mcSocket.leaveGroup(new InetSocketAddress(InetAddress.getLocalHost(), 5555),
                     NetworkInterface.getByInetAddress(InetAddress.getLocalHost()));

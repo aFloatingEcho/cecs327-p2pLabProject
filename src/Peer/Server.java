@@ -52,7 +52,7 @@ public class Server {
         for(String address : localIPs) {
             // NOTE: (IDK) this does not cover for Gavin's multiple addresses for one machine solution
             // deprecated
-            mcSocketGroup.joinGroup(InetAddress.getByName(address));
+            // mcSocketGroup.joinGroup(InetAddress.getByName(address));
             // alternative, joinGroup(SocketAddress, NetworkInterface), InetSocketAddress extends SocketAddress
             mcSocketGroup.joinGroup(new InetSocketAddress(InetAddress.getByName(address), 5555), // or PORT
                     NetworkInterface.getByInetAddress(InetAddress.getByName(address)));
