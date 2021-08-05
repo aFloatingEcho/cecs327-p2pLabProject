@@ -2,12 +2,29 @@ package Peer;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.List;
+
+import Network.NetworkManager;
 
 public class FileServer {
 	
 	private MulticastSocket serverBroadcast;
 	private String hostName;
 	private ArrayList<String> fileList;
+	
+	public static void main(String[] args) throws InterruptedException, IOException {
+		NetworkManager network = new NetworkManager();
+		List<String> allIPAddresses = network.getAllLocalIPAddresses();
+		FileDirectory allFiles = new FileDirectory("sync\\");
+		List<String> submit = allFiles.getFileList();
+		FileServer manager = new FileServer("230.0.113.0",5555, (ArrayList<String>) submit);
+		int i = 0;
+		while(i != 250000) {
+			manager.broadCast();
+			i++;
+		}
+		manager.shutdown();
+	}
 	
 	public FileServer(String name, int portNumber, ArrayList<String> fileList) throws IOException{
 		this.serverBroadcast = new MulticastSocket(portNumber);
