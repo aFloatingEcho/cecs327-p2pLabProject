@@ -1,5 +1,8 @@
 
 import java.util.ArrayList; // Import Java ArrayList in order to handle file lists.
+
+import Peer.FileDirectory;
+
 import java.io.*; // Import Java library to handle directories
 import java.nio.file.Files;
 

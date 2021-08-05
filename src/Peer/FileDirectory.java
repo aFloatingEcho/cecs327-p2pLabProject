@@ -1,3 +1,4 @@
+package Peer;
 /**
  * FileDirectory Class intended to sync file directories together.
  */
