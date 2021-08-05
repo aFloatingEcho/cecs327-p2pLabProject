@@ -103,7 +103,8 @@ public class Node
 //		//eliminate neighbors
 //		neighboringNodes = null;
 
-		client.leave(server.getMcSocketGroup());
+		if(!client.leave(server.getMcSocketGroup()))
+			System.err.println("Couldn't leave the network.");
 	}
 	
 	/**
@@ -159,14 +160,21 @@ public class Node
 	}
 
 	/**
-	 * Figure out if there are any files on the network that the node is missing, then download them, adding them to the localFiles list.
-	 * Conflict handling may occur here as helper functions.
-	 * This should happen as the result of an event.
+	 * Receives any file data that may be sent
 	 */
-	public void updateLocalFiles()
-	{
-		// NOTE: this action should be handled by the FileDirectory class
+	public void receiveFile() throws IOException {
+		server.receive();
 	}
+
+	/**
+	 * Sends a file to the nodes subscribed to the MulticastSocket group
+	 * @param inputFile File
+	 */
+	public void sendFile(File inputFile) {
+		client.send(server.getMcSocketGroup(), inputFile);
+	}
+
+
 	
 	public Timestamp getTimeStamp()
 	{

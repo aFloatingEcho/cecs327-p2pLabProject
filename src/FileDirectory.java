@@ -74,8 +74,7 @@ public class FileDirectory {
 	
 	public boolean doesFileExist(String FileName) {
 		File toTest = new File(this.sourceLocation.getAbsoluteFile() + FileName);
-		boolean toReturn = toTest.exists();
-		return toReturn;
+		return toTest.exists();
 	}
 	
 	public File returnFile(String FileName) {
