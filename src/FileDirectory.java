@@ -78,14 +78,14 @@ public class FileDirectory {
 		return toReturn;
 	}
 	
-	public BufferedOutputStream returnFile(String FileName) {
+	public BufferedInputStream returnFile(String FileName) {
 		File fileToCopy = null;
-		FileOutputStream fileToReturn = null;
-		BufferedOutputStream returnContents = null;
+		FileInputStream fileToReturn = null;
+		BufferedInputStream returnContents = null;
 		try {
 			fileToCopy = new File(this.sourceLocation.getAbsolutePath() + FileName);
-			fileToReturn = new FileOutputStream(fileToCopy);
-			returnContents = new BufferedOutputStream(fileToReturn);
+			fileToReturn = new FileInputStream(fileToCopy);
+			returnContents = new BufferedInputStream(fileToReturn);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
