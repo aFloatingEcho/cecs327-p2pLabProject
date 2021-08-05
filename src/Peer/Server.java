@@ -2,6 +2,9 @@ package Peer;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import java.util.List;
 
@@ -48,14 +51,32 @@ public class Server {
      * Joins all available IP addresses to the MulticastSocket
      * @param localIPs ArrayList<String>
      */
-    public void join(List<String> localIPs) throws IOException {
+    public void join(List<String> localIPs) {
+    	ExecutorService es = Executors.newFixedThreadPool(localIPs.size());
         for(String address : localIPs) {
-            // NOTE: (IDK) this does not cover for Gavin's multiple addresses for one machine solution
-            // deprecated
-            // mcSocketGroup.joinGroup(InetAddress.getByName(address));
-            // alternative, joinGroup(SocketAddress, NetworkInterface), InetSocketAddress extends SocketAddress
-            mcSocketGroup.joinGroup(new InetSocketAddress(InetAddress.getByName(address), 5555), // or PORT
-                    NetworkInterface.getByInetAddress(InetAddress.getByName(address)));
+        	es.submit(new Thread(new Runnable() {
+				@Override
+				public void run() {
+					// NOTE: (IDK) this does not cover for Gavin's multiple addresses for one machine solution
+		            // deprecated
+		            // mcSocketGroup.joinGroup(InetAddress.getByName(address));
+		            // alternative, joinGroup(SocketAddress, NetworkInterface), InetSocketAddress extends SocketAddress
+		            try {
+						mcSocketGroup.joinGroup(new InetSocketAddress(InetAddress.getByName(address), 5555), // or PORT
+						        NetworkInterface.getByInetAddress(InetAddress.getByName(address)));
+					} catch (UnknownHostException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SocketException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+        		
+        	}));
         }
     }
 
