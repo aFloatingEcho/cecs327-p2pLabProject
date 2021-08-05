@@ -1,5 +1,8 @@
 package Peer;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.net.*;
 
@@ -56,9 +59,18 @@ public class Client {
      * Returns true if successful, else false
      * @return boolean
      */
-    public boolean send(MulticastSocket mcSocket) {
+    public boolean send(MulticastSocket mcSocket, File inputFile) {
         // NOTE: FileDirectory/Stream stuff should be called here then the respective classes will do the magic
         //       and may want to use Threads in here or whatever class will be calling this method
+    	int fileSize = (int) inputFile.length();
+    	try {
+    		byte[] fileBroken = new byte[fileSize];
+    		DatagramPacket packet = new DatagramPacket(fileBroken, fileBroken.length, mcSocket.getInetAddress(),this.PORT);
+    		mcSocket.send(packet);
+    		return true;
+    	} catch(Exception e) {
+    		System.out.println(e);
+    	}
         return false;
     }
 
