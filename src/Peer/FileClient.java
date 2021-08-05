@@ -22,6 +22,9 @@ public class FileClient {
 		FileDirectory allFiles = new FileDirectory("sync\\");
 		List<String> submit = allFiles.getFileList();
 		FileClient manager = new FileClient(5555, (ArrayList<String>) submit);
+		manager.join(allIPAddresses);
+		manager.recieve();
+		manager.closed();
 	}
 	
 	public FileClient(int portNumber, ArrayList<String> fileList) throws IOException {
@@ -66,6 +69,24 @@ public class FileClient {
     }
     
     public void recieve() {
-    	
+    	String recieved = null;
+    	while (!recieved.equals("Closed")) {
+    		DatagramPacket inbound = null;
+    	    byte[] buf = new byte[256];
+            inbound = new DatagramPacket(buf, buf.length);
+            try {
+				clientConnection.receive(inbound);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            String decode = new String(inbound.getData(), 0, inbound.getLength());
+            recieved = decode;
+            System.out.println(recieved);
+    	}
+    }
+    
+    public void closed() {
+    	this.clientConnection.close();
     }
 }
