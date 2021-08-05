@@ -8,16 +8,17 @@ import Network.NetworkManager;
 
 public class FileServer {
 	
-	private MulticastSocket serverBroadcast;
+	private DatagramSocket serverBroadcast;
 	private String hostName;
 	private ArrayList<String> fileList;
+	private int portNumber;
 	
 	public static void main(String[] args) throws InterruptedException, IOException {
 		NetworkManager network = new NetworkManager();
 		List<String> allIPAddresses = network.getAllLocalIPAddresses();
 		FileDirectory allFiles = new FileDirectory("sync\\");
 		List<String> submit = allFiles.getFileList();
-		FileServer manager = new FileServer("230.0.113.0",5555, (ArrayList<String>) submit);
+		FileServer manager = new FileServer("230.0.113.0", 5555, (ArrayList<String>) submit);
 		int i = 0;
 		while(i != 250000) {
 			manager.broadCast();
@@ -27,7 +28,8 @@ public class FileServer {
 	}
 	
 	public FileServer(String name, int portNumber, ArrayList<String> fileList) throws IOException{
-		this.serverBroadcast = new MulticastSocket(portNumber);
+		this.serverBroadcast = new MulticastSocket();
+		this.portNumber = portNumber;
 		this.hostName = name;
 		this.fileList = fileList;
 	}
@@ -37,7 +39,8 @@ public class FileServer {
 			String message = eachFile;
 			byte[] brokenUp = message.getBytes();
 			try {
-				serverBroadcast.send(new DatagramPacket(brokenUp, brokenUp.length, this.serverBroadcast.getInetAddress(), this.serverBroadcast.getPort()));
+				System.out.println("Broadcasting: " + message);
+				serverBroadcast.send(new DatagramPacket(brokenUp, brokenUp.length, InetAddress.getByName(this.hostName), this.portNumber));
 			} catch (IOException e) {
 				System.out.println(message + " failed to send!");
 				e.printStackTrace();
@@ -46,7 +49,7 @@ public class FileServer {
 		try {
 			String message = "Close";
 			byte[] brokenUp = message.getBytes();
-			serverBroadcast.send(new DatagramPacket(brokenUp, brokenUp.length, this.serverBroadcast.getInetAddress(), this.serverBroadcast.getPort()));
+			serverBroadcast.send(new DatagramPacket(brokenUp, brokenUp.length, InetAddress.getByName(this.hostName), this.portNumber));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
