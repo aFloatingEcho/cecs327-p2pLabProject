@@ -91,6 +91,15 @@ public class FileDirectory {
 	}
 	
 	/**
+	 * Return absolute file path of a location file.
+	 * @param fileName
+	 * @return
+	 */
+	public String returnFilePath(String fileName) {
+		return (this.sourceLocation.getAbsolutePath() + fileName);
+	}
+	
+	/**
 	 * Getters of information of the files in the source directory.
 	 * @return
 	 */
