@@ -15,12 +15,17 @@ public class Server implements Runnable
 		 serverSocket = new ServerSocket(portNum);
 	 }
 	 
+	 /*
+	  * Method that lets the server listen for incoming connections, and once a connection is made, facilitates communication back and forth.
+	  * A lot of the system.out text is meant as debugging, will likely not be necessary for the final product.  
+	  * Current implementation involves repeating an incoming message to the connected client.
+	  */
 	 public void listenAndProvideService() throws IOException
 	 {
 		 //debug
 		 System.out.println("Listening for incoming connection: ");
 		 
-		 //Accept an incoming connection
+		 //Accept an incoming connection, and create writers and readers.
 		 clientSocket = serverSocket.accept();
 		 out = new PrintWriter(clientSocket.getOutputStream(), true);
 		 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -32,6 +37,7 @@ public class Server implements Runnable
 		 
 		 while((input = in.readLine()) != null)
 		 {
+			 //When input is recieved, echo it back to the client.
 			 System.out.println("Server received: " + input);
 			 output = "Server received: " + input;
 			 out.println(output);
@@ -40,6 +46,9 @@ public class Server implements Runnable
 		 
 	 }
 
+	 /*
+	  * For use in threads; called with the Thread.start() method.
+	  */
 	@Override
 	public void run() 
 	{
