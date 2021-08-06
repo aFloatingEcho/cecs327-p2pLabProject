@@ -1,3 +1,4 @@
+package fileDirectory;
 /**
  * FileDirectory Class intended to sync file directories together.
  */
