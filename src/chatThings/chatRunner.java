@@ -11,7 +11,7 @@ public class chatRunner {
 		int port = 4444;
 		//Hardcode the name of the computer you'd like to connect to for now; you can find this by 
 		//running "ipconfig /all" in the cmd prompt.
-		String targetHostName = "DESKTOP-DSUC2OA";
+		String targetHostName = "PLACEHOLDER";
 		
 
 		Server chatServer = new Server(port);
