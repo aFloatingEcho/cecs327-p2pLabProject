@@ -32,6 +32,7 @@ public class Server implements Runnable
 		 
 		 while((input = in.readLine()) != null)
 		 {
+			 System.out.println("Server received: " + input);
 			 output = "Server received: " + input;
 			 out.println(output);
 			 
