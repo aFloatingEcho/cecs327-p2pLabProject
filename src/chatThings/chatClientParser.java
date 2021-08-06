@@ -31,17 +31,27 @@ public class chatClientParser {
 		this.hostName = hostName;
 	}
 	
+	/**
+	 * Parser that reads the commands directly.
+	 * @param commandInput
+	 * @param fileInput
+	 * @param portNumber
+	 * @return
+	 */
 	public String command(String commandInput, String fileInput, String portNumber) {
 		String reply = null;
 		switch(commandInput) {
+		// Command to check the file.
 		case "CHECK":
 			if(this.syncDirectory.determineShouldBeReplaced(Long.parseLong(portNumber), fileInput)) {
 				reply = "TRUE";
 			}
 			reply = "FALSE";
+		// Command to delete file.
 		case "DELETE":
 			this.syncDirectory.deleteFile(fileInput);;
 			reply = "DONE";
+		// Command to accept a new file from the server.
 		case "SEND":
 			try {
 				DataClient getFile = new DataClient(Integer.parseInt(portNumber), fileInput, this.hostName);
@@ -51,6 +61,8 @@ public class chatClientParser {
 				e.printStackTrace();
 			}
 			reply = "DONE";
+		case "QUIT":
+			reply = "QUIT";
 		}
 		return reply;
 	}
