@@ -9,6 +9,13 @@ import java.io.InputStream;
 
 public class DataClient {
 
+	public static void main(String[] args) throws IOException {
+		String serverName = "";
+		DataClient test = new DataClient(5555, "sync\\testing.txt", serverName);
+		test.acceptFile();
+	}
+
+	
 	private Socket clientConnection = null;
 	private String fileName = null;
 	// TODO: Seriously, fix that magic number with some dynamic way- perhaps in chat indicate the length in the string.
