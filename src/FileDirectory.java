@@ -11,13 +11,11 @@ public class FileDirectory {
 	// and directory when setting up arguments.
 	private ArrayList<File> fileList;
 	private ArrayList<String> listToScan;
-	private String sourceLocation;
-	private String targetLocation; 
+	private File sourceLocation;
 	
-	public FileDirectory(String sourceDirectory, String targetDirectory){
-		this.sourceLocation = sourceDirectory;
-		this.targetLocation = targetDirectory;
-		this.fileList = this.getFileList(this.sourceLocation);
+	public FileDirectory(String sourceDirectory){
+		this.sourceLocation = new File(sourceDirectory);
+		this.fileList = this.convertFileList(this.sourceLocation);
 		this.listToScan = this.processFileList(this.fileList);
 	}
 	
@@ -37,16 +35,6 @@ public class FileDirectory {
 	}
 
 	/**
-	 * Scans a directory via passed fileString
-	 * @param directoryToScan
-	 * @return
-	 */
-	public ArrayList<File> getFileList(String directoryToScan){
-		File toScan = new File(directoryToScan);
-		return convertFileList(toScan);
-	}
-
-	/**
 	 * Outputs an agnostic file list that is useful for examining the files
 	 * in the source/target sections.
 	 * @param directoryList
@@ -55,23 +43,23 @@ public class FileDirectory {
 	public ArrayList<String> processFileList(ArrayList<File> directoryList){
 		ArrayList<String> listOfFiles = new ArrayList<>();
 		for(File files: directoryList) {
-			listOfFiles.add(files.getAbsolutePath().substring(this.sourceLocation.length()));
+			listOfFiles.add(files.getAbsolutePath().substring(this.sourceLocation.getAbsolutePath().length()));
 		}
 		return listOfFiles;
 	}
 	
 	/**
 	 * Determines if a file needs to be transfered from the source to the destination.
-	 * @param sourceLocation
+	 * @param replacementAge long variable that indicates the time since the file has been replaced
 	 * @param destinationLocation
 	 * @return boolean value, true if it needs to be replaced, else false if it doesn't.
 	 */
-	public boolean determineShouldBeReplaced(String sourceFile, String destinationFile) {
+	public boolean determineShouldBeReplaced(long replacementAge, String destinationFile) {
 		// Attempt to check if a preexisting file exists.
 		try {
 			if(new File(destinationFile).exists()) {
 				// Determine if the destination file is older than the source location.
-				if(new File(sourceFile).lastModified() > new File(destinationFile).lastModified()) {
+				if(replacementAge > new File(destinationFile).lastModified()) {
 					return true;
 				}
 				else {
@@ -84,26 +72,33 @@ public class FileDirectory {
 		return true;
 	}
 	
+	public boolean doesFileExist(String FileName) {
+		File toTest = new File(this.sourceLocation.getAbsoluteFile() + FileName);
+		boolean toReturn = toTest.exists();
+		return toReturn;
+	}
+	
+	public BufferedOutputStream returnFile(String FileName) {
+		File fileToCopy = null;
+		FileOutputStream fileToReturn = null;
+		BufferedOutputStream returnContents = null;
+		try {
+			fileToCopy = new File(this.sourceLocation.getAbsolutePath() + FileName);
+			fileToReturn = new FileOutputStream(fileToCopy);
+			returnContents = new BufferedOutputStream(fileToReturn);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return returnContents;
+	}
+	
 	/**
-	 * Copies a file, raises an exception if it encounters an issue.
-	 * @param sourceFile
-	 * @param destinationFile
+	 * Return absolute file path of a location file.
+	 * @param fileName
 	 * @return
 	 */
-	public void copyFiles(String sourceFile, String destinationFile) {
-		if(this.determineShouldBeReplaced(sourceFile, destinationFile)) {
-			File fileToCopy = new File(sourceFile);
-			File fileTarget = new File(destinationFile);
-			try {
-				Files.copy(fileToCopy.toPath(), fileTarget.toPath());
-			} catch(Exception IOError) {
-				System.out.println("Failure to copy: " + fileToCopy.toString());
-				System.out.println(IOError.getMessage());
-			}
-		}
-		else {
-			System.out.println(sourceFile + " already exists in " + destinationFile);
-		}
+	public String returnFilePath(String fileName) {
+		return (this.sourceLocation.getAbsolutePath() + fileName);
 	}
 	
 	/**
@@ -118,13 +113,13 @@ public class FileDirectory {
 	 * @return
 	 */
 	public String getSourceDirectory() {
-		return this.sourceLocation;
+		return this.sourceLocation.getAbsolutePath();
 	}
 	/**
-	 * Getters of information of the target directory.
+	 * Getters of the actual Filelist.
 	 * @return
 	 */
-	public String getTargetDirectory() {
-		return this.targetLocation;
+	public ArrayList<File> getActualFileList(){
+		return this.fileList;
 	}
 }
