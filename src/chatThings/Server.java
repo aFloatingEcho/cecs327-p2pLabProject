@@ -17,6 +17,9 @@ public class Server implements Runnable
 	 
 	 public void listenAndProvideService() throws IOException
 	 {
+		 //debug
+		 System.out.println("Listening for incoming connection: ");
+		 
 		 //Accept an incoming connection
 		 clientSocket = serverSocket.accept();
 		 out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -25,6 +28,7 @@ public class Server implements Runnable
 		 //Process input and output
 		 String input;
 		 String output;
+		 out.println("Beginning chat: >>>>>>>>>");
 		 
 		 while((input = in.readLine()) != null)
 		 {
