@@ -63,6 +63,9 @@ public class Client implements Runnable
 		clientSocket.close();
 	}
 
+	 /*
+	  * For use in threads; called with the Thread.start() method.
+	  */
 	@Override
 	public void run() 
 	{
