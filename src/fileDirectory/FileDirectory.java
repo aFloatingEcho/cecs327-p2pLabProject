@@ -75,6 +75,16 @@ public class FileDirectory {
 	}
 	
 	/**
+	 * Get the last modified info of a string
+	 * @param FileName
+	 * @return
+	 */
+	public String getFileAge(String FileName) {
+		long age = new File(this.returnFilePath(FileName)).lastModified();
+		return Long.toString(age);
+	}
+	
+	/**
 	 * Wrapper to reutrn if a file exists or not
 	 * @param FileName
 	 * @return
