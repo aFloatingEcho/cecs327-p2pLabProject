@@ -105,6 +105,23 @@ public class FileDirectory {
 	}
 	
 	/**
+	 * Funciton that deletes a file and creates a blank file in its tombstone.
+	 * @param FileName
+	 */
+	public void deleteFile(String FileName) {
+		String fileToDelete = this.returnFilePath(FileName);
+		File deleteFile = new File(fileToDelete);
+		if(deleteFile.exists()) {
+			deleteFile.delete();
+		}
+		try {
+			deleteFile.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * Return absolute file path of a location file.
 	 * @param fileName
 	 * @return
