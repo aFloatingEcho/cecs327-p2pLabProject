@@ -81,6 +81,7 @@ public class DataClient {
 			output.close();
 			outputBuffer.close();
 			this.clientConnection.close();
+			System.out.println(this.fileName + " has been recieved!");
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
