@@ -11,7 +11,7 @@ public class DataClient {
 
 	public static void main(String[] args) throws IOException {
 		String serverName = "";
-		DataClient test = new DataClient(5555, "sync\\testing.txt", serverName);
+		DataClient test = new DataClient(5555, "", serverName);
 		test.acceptFile();
 	}
 
@@ -29,6 +29,7 @@ public class DataClient {
 	 */
 	public DataClient(String fileName, String serverName) throws IOException{
 		this.clientConnection = new Socket(serverName, 55555);
+		this.fileName = fileName;
 	}
 	
 	/**
@@ -40,6 +41,7 @@ public class DataClient {
 	 */
 	public DataClient(int portNo, String fileName, String serverName) throws IOException{
 		this.clientConnection = new Socket(serverName, portNo);
+		this.fileName = fileName;
 	}
 	
 	/**
@@ -55,6 +57,7 @@ public class DataClient {
 		InputStream input = null;
 		// Stream used to output the file (https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/FileOutputStream.html)
 		FileOutputStream output = null;
+		output = new FileOutputStream(this.fileName);
 		// Stream used to buffer the output without calling the system (https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/BufferedOutputStream.html)
 		BufferedOutputStream outputBuffer = null;
 		System.out.println("Attempt to recieve: " + this.fileName);
@@ -62,7 +65,6 @@ public class DataClient {
 		byte[] brokenUp = new byte[temp_size];
 		try {
 			input = this.clientConnection.getInputStream();
-			output = new FileOutputStream(this.fileName);
 			outputBuffer = new BufferedOutputStream(output);
 			readPosition = input.read(brokenUp, 0, brokenUp.length);
 			currentPosition = readPosition;
