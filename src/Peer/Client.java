@@ -36,18 +36,18 @@ public class Client {
     }
 
     /**
-     * Overloaded constructor for specified port number and Socket
+     * Overloaded constructor for specific Socket
      * @param socket Socket
      */
     public Client(Socket socket) throws IOException {
         this.PORT = socket.getPort();
-        if(!socket.isClosed()) socket.close();   // WARN: will this error for getting the InetAddress if closed?
         this.cSocket = new Socket(socket.getInetAddress(), PORT);   // cannot copy sockets, must create a new one
+        if(!socket.isClosed()) socket.close();
 //        this.cSocket = socket;
     }
 
     /**
-     * Join to the specified SocketAddress server
+     * Join the specified SocketAddress server
      * SocketAddress contains the InetAddress and the Port Number
      * @param serverAddress SocketAddress
      */
@@ -59,6 +59,12 @@ public class Client {
 //        }
     }
 
+    /**
+     * Sends a command request to the server and returns true if successful, false otherwise.
+     * @param socket Socket
+     * @param command String
+     * @return boolean
+     */
     private boolean send(Socket socket, String command) {
         try {
             DataOutputStream oStream = new DataOutputStream(socket.getOutputStream());
@@ -74,9 +80,17 @@ public class Client {
         return false;
     }
 
+    /**
+     * Update command updates the specified file directory
+     * @param directoryPath String
+     */
     public void update(String directoryPath) {
         String command = new String("UPDATE::" + directoryPath);
         if(!send(cSocket, command)) new Exception("Request not sent.").printStackTrace();
     }
 
+    // probably don't want a public method for this
+//    public void close() throws IOException {
+//        cSocket.close();
+//    }
 }
