@@ -1,24 +1,28 @@
 package Peer;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+/**
+ * Client sends commands to server(s) regarding the context of file transfers.
+ * Client does NOT send files, instead it may send a request to a server node for a file.
+ * Any requests are satisfied by the FileDirectory class.
+ * Client is merely one half of a chat program between two nodes.
+ */
 public class Client {
     // NOTE: may not need these b/c socket is the same and port should be kept at small scale right now
     private final int PORT;   // port used for sending commands
-    private final Socket SOCKET;   // socket use for transferring commands
+    private final Socket cSocket;
 
     /**
      * Default constructor
      */
     public Client() {
         this.PORT = 5555;
-        this.SOCKET = new Socket();
+        this.cSocket = new Socket();
     }
 
     // NOTE: may not need all these constructors
@@ -28,67 +32,51 @@ public class Client {
      */
     public Client(int port) {
         this.PORT = port;
-        this.SOCKET = new Socket();
+        this.cSocket = new Socket();
     }
 
     /**
      * Overloaded constructor for specified port number and Socket
-     * @param port int
      * @param socket Socket
      */
-    public Client(int port, Socket socket) {
-        this.PORT = port;
-        this.SOCKET = socket;
+    public Client(Socket socket) throws IOException {
+        this.PORT = socket.getPort();
+        if(!socket.isClosed()) socket.close();   // WARN: will this error for getting the InetAddress if closed?
+        this.cSocket = new Socket(socket.getInetAddress(), PORT);   // cannot copy sockets, must create a new one
+//        this.cSocket = socket;
     }
 
     /**
-     * Join to the specified SocketAddress
-     * @param socketAddress SocketAddress
+     * Join to the specified SocketAddress server
+     * SocketAddress contains the InetAddress and the Port Number
+     * @param serverAddress SocketAddress
      */
-    public void join(SocketAddress socketAddress) throws IOException {
-        // NOTE: this does not cover for Gavin's multiple addresses for one machine solution
-        // deprecated
-        // mcSocket.joinGroup(InetAddress.getLocalHost());
-        // alternative, joinGroup(SocketAddress, NetworkInterface), InetSocketAddress extends SocketAddress
-//        mcSocket.joinGroup(new InetSocketAddress(InetAddress.getLocalHost(), 5555),
-//                NetworkInterface.getByInetAddress(InetAddress.getLocalHost()));
-
-        SOCKET.connect(socketAddress);
+    public void join(SocketAddress serverAddress) throws IOException {
+        if(!cSocket.isConnected())
+            cSocket.connect(serverAddress);   // connect to server endpoint
+//        else {
+//            cSocket.bind(socketAddress);   // bind to a different endpoint
+//        }
     }
 
-    /**
-     * Send commands to other peers
-     * Returns true if successful, else false
-     * @return boolean
-     */
-    public boolean send(Socket socket, File inputFile) {
+    private boolean send(Socket socket, String command) {
+        try {
+            DataOutputStream oStream = new DataOutputStream(socket.getOutputStream());
+            // consider using this if a param array is necessary
+//            byte[] bytes = command.getBytes(StandardCharsets.UTF_8);
+            oStream.writeUTF(command);
+            oStream.flush();
+            oStream.close();
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
-//    /**
-//     * The current client leaves the MulticastSocket group
-//     * Return true if successful, else false
-//     * @return boolean
-//     */
-//    public boolean leave(MulticastSocket mcSocket) {
-//        try {
-//            // deprecated
-//            // mcSocket.leaveGroup(InetAddress.getLocalHost());
-//            // alternative, leaveGroup(SocketAddress, NetworkInterface), InetSocketAddress extends SocketAddress
-//            mcSocket.leaveGroup(new InetSocketAddress(InetAddress.getLocalHost(), 5555),
-//                    NetworkInterface.getByInetAddress(InetAddress.getLocalHost()));
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//        return true;
-//    }
+    public void update(String directoryPath) {
+        String command = new String("UPDATE::" + directoryPath);
+        if(!send(cSocket, command)) new Exception("Request not sent.").printStackTrace();
+    }
 
-//    public int getPORT() {
-//        return PORT;
-//    }
-
-//    public Socket getSOCKET() {
-//        return SOCKET;
-//    }
 }
