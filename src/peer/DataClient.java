@@ -11,7 +11,8 @@ public class DataClient {
 
 	private Socket clientConnection = null;
 	private String fileName = null;
-	private int temp_size = 1000000;
+	// TODO: Seriously, fix that magic number with some dynamic way- perhaps in chat indicate the length in the string.
+	private int temp_size = 1000000; //capped the total size to 1 mb
 	
 	/**
 	 * Default constructor (do not use, it defaults a port number that is already in use)
