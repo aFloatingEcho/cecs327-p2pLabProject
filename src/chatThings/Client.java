@@ -64,6 +64,7 @@ public class Client implements Runnable
 	{
 		try 
 		{
+			System.out.println("Chatting thread!");
 			this.chatWithOther();
 		}
 		catch (IOException e)

@@ -40,6 +40,8 @@ public class Server implements Runnable
 	{
 		try 
 		{
+			//debug
+			System.out.println("Listening Thread!");
 			this.listenAndProvideService();
 		}
 		catch (IOException e) 
