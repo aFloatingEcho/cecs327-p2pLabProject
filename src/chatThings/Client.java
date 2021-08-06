@@ -36,6 +36,7 @@ public class Client implements Runnable
 		String fromServer;
 		String fromClient;
 		
+		//Create a socket, and attempt to connect to the targeted host's port number.  
 		clientSocket = new Socket(hostName, portNum);
 		out = new PrintWriter(clientSocket.getOutputStream(), true);
 		socketIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -44,8 +45,10 @@ public class Client implements Runnable
 		System.out.println("Connection established!");
 		while ((fromServer = socketIn.readLine()) != null) 
 		{
+			//Display a message from the server.
 			System.out.println("Server: " + fromServer);		   
 
+			//Take user input, and display it.  out.println() finally sends the message to the server via the socket.
 		    fromClient = systemIn.readLine();
 		    if (fromClient != null) 
 		    {
@@ -60,6 +63,9 @@ public class Client implements Runnable
 		clientSocket.close();
 	}
 
+	 /*
+	  * For use in threads; called with the Thread.start() method.
+	  */
 	@Override
 	public void run() 
 	{
