@@ -11,7 +11,8 @@ public class DataClient {
 
 	public static void main(String[] args) throws IOException {
 		String serverName = "";
-		DataClient test = new DataClient(5555, "", serverName);
+		String fileName = "";
+		DataClient test = new DataClient(5555, fileName, serverName);
 		test.acceptFile();
 	}
 
@@ -75,14 +76,6 @@ public class DataClient {
 			e.printStackTrace();
 			return false;
 		}
-		
-		// Continuously read the input as the files are received via the socket until the connection stops.
-		do {
-			readPosition = input.read(brokenUp, currentPosition, (brokenUp.length - currentPosition));
-			if(readPosition >= 0) {
-				currentPosition += readPosition;
-			}
-		} while(readPosition > -1);
 		
 		// Write the file out, and close all buffers on completion.
 		try {
