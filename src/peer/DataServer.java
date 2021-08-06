@@ -29,8 +29,6 @@ public class DataServer {
 	}
 	
 	public boolean transferFile() {
-		// Set variables for the current position as well as the position read
-		int currentPosition = 0, readPosition;
 		// Stream used to input the file (https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/FileInputStream.html)
 		FileInputStream input = null;
 		// Stream used to buffer the input without calling the system (https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/BufferedInputStream.html)
