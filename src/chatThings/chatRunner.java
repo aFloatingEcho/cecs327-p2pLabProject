@@ -14,8 +14,8 @@ public class chatRunner {
 		String targetHostName = "DESKTOP-DSUC2OA";
 		
 
-		Server chatServer = new Server(port);
-		Client chatClient = new Client(targetHostName, port);
+		chatServer chatServer = new chatServer(port);
+		chatClient chatClient = new chatClient(targetHostName, port);
 		
 		new Thread(chatClient, "Client").start();
 		new Thread(chatServer, "Server").start();
