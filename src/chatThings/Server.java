@@ -3,14 +3,14 @@ package chatThings;
 import java.io.*;
 import java.net.*;
 
-public class chatServer implements Runnable
+public class Server implements Runnable
 {
 	 ServerSocket serverSocket;
 	 Socket clientSocket;
 	 PrintWriter out;
 	 BufferedReader in;
 	  
-	 public chatServer(int portNum) throws IOException
+	 public Server(int portNum) throws IOException
 	 {
 		 serverSocket = new ServerSocket(portNum);
 	 }
