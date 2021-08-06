@@ -56,11 +56,12 @@ public class FileDirectory {
 	 * @return boolean value, true if it needs to be replaced, else false if it doesn't.
 	 */
 	public boolean determineShouldBeReplaced(long replacementAge, String destinationFile) {
+		String actualLocation = this.returnFilePath(destinationFile);
 		// Attempt to check if a preexisting file exists.
 		try {
-			if(new File(destinationFile).exists()) {
+			if(new File(actualLocation).exists()) {
 				// Determine if the destination file is older than the source location.
-				if(replacementAge > new File(destinationFile).lastModified()) {
+				if(replacementAge > new File(actualLocation).lastModified()) {
 					return true;
 				}
 				else {
@@ -73,18 +74,28 @@ public class FileDirectory {
 		return true;
 	}
 	
+	/**
+	 * Wrapper to reutrn if a file exists or not
+	 * @param FileName
+	 * @return
+	 */
 	public boolean doesFileExist(String FileName) {
-		File toTest = new File(this.sourceLocation.getAbsoluteFile() + FileName);
+		File toTest = new File(this.returnFilePath(FileName));
 		boolean toReturn = toTest.exists();
 		return toReturn;
 	}
 	
+	/**
+	 * Returns a specific deliverable when a file is named.
+	 * @param FileName
+	 * @return
+	 */
 	public BufferedOutputStream returnFile(String FileName) {
 		File fileToCopy = null;
 		FileOutputStream fileToReturn = null;
 		BufferedOutputStream returnContents = null;
 		try {
-			fileToCopy = new File(this.sourceLocation.getAbsolutePath() + FileName);
+			fileToCopy = new File(this.returnFilePath(FileName));
 			fileToReturn = new FileOutputStream(fileToCopy);
 			returnContents = new BufferedOutputStream(fileToReturn);
 		} catch (FileNotFoundException e) {
