@@ -1,14 +1,11 @@
 
 package peer;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
-import java.net.InetAddress;
 
 public class DataClient {
 
@@ -39,15 +36,18 @@ public class DataClient {
 	
 	/**
 	 * Accepts a file transfer from the server.
-	 * @return
+	 * This probably should be broken down into several programs but whatever.
+	 * @returns true if successful, else return false
 	 * @throws IOException
 	 */
 	public boolean acceptFile() throws IOException {
 		// Set variables for the current position as well as the position read
 		int currentPosition = 0, readPosition;
-		// Set up streams for accepting a file
+		// Set up streams for accepting a file 
 		InputStream input = null;
+		// Stream used to output the file (https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/FileOutputStream.html)
 		FileOutputStream output = null;
+		// Stream used to buffer the output without calling the system (https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/BufferedOutputStream.html)
 		BufferedOutputStream outputBuffer = null;
 		System.out.println("Attempt to recieve: " + this.fileName);
 		// Attempt to write the files.
@@ -63,7 +63,10 @@ public class DataClient {
 			return false;
 		} catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
+		
+		// Continuously read the input as the files are received via the socket until the connection stops.
 		do {
 			readPosition = input.read(brokenUp, currentPosition, (brokenUp.length - currentPosition));
 			if(readPosition >= 0) {
@@ -80,7 +83,9 @@ public class DataClient {
 			this.clientConnection.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}
+
 }
