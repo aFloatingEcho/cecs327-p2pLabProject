@@ -40,11 +40,11 @@ public class Client implements Runnable
 		out = new PrintWriter(clientSocket.getOutputStream(), true);
 		socketIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 		//While the exit command has not been entered, display messages from both the user and the server.
-		while ((fromServer = socketIn.readLine()) != "Exit") 
+		
+		System.out.println("Connection established!");
+		while ((fromServer = socketIn.readLine()) != null) 
 		{
-		   System.out.println("Server: " + fromServer);
-		   if (fromServer.equals("Bye."))
-		       break;
+			System.out.println("Server: " + fromServer);		   
 
 		    fromClient = systemIn.readLine();
 		    if (fromClient != null) 
@@ -56,6 +56,7 @@ public class Client implements Runnable
 		
 		//If we get here, the exit command should have been entered, so we can close the socket to free the server for 
 		//additional connections.
+		System.out.println("closing connection"); //debug
 		clientSocket.close();
 	}
 
