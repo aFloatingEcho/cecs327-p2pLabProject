@@ -67,10 +67,11 @@ public class Server {
     /**
      * Receives any commands sent from another peer and returns the parsed string input
      * @param inbound Socket
-     * @return Stringp[]
+     * @return String[]
      */
     public String[] receive(Socket inbound) throws IOException {
         // NOTE: this could be threaded but a thread may as well be created wherever this method is called
+//        Socket inSocket = serverSocket.accept();
         DataInputStream iStream = new DataInputStream(inbound.getInputStream());
         String input = iStream.readUTF();
         String[] msg = input.split("::");

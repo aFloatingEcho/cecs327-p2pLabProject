@@ -87,6 +87,11 @@ public class Client {
     public void update(String directoryPath) {
         String command = new String("UPDATE::" + directoryPath);
         if(!send(cSocket, command)) new Exception("Request not sent.").printStackTrace();
+        send(cSocket, command);
+    }
+
+    public Socket getcSocket() {
+        return cSocket;
     }
 
     // probably don't want a public method for this
