@@ -22,11 +22,10 @@ public class Node
 	private NetworkManager networkManager;
 	
 	/** The files local to this machine we wish to sync.  Directory should be specified in the constructor.  */ 
-	//Perhaps change this to a List<File>?  Perhaps unneccesary?
+	//Perhaps unneccesary?
 	//private ArrayList<File> localFiles;
 	
 	/** Nodes that this object has a direct connection to */
-	//Perhaps change this to a List<Node>?
 	private ArrayList<Node> neighboringNodes;
 	
 	/**Timestamp for the purposes of determining which node is the oldest.*/
@@ -46,7 +45,7 @@ public class Node
 	{
 		this.networkManager = new NetworkManager();
 		//localFiles = null;
-		neighboringNodes = null;
+		neighboringNodes = new ArrayList<Node>();
 		pushSocket = null;
 		pullSocket = null;
 		this.timestamp = new Timestamp(System.currentTimeMillis());
@@ -98,7 +97,8 @@ public class Node
 	 */
 	public void findNeighbors()
 	{
-		
+		/*This method needs to broadcast to the network looking for nodes also running this program.  When it finds one, it should ask
+		//that node for the details of other nodes connected to the network.   */
 	}
 	
 	/**
@@ -107,16 +107,26 @@ public class Node
 	 */
 	public void connectAndSendMessage(String targetID)
 	{
-		connectToPeer(targetID);
+		//Loop through list of neighbors (should be all nodes on our network) 
+		for(int i = 0; i < neighboringNodes.size(); i++)
+		{
+			//TODO: Get ID of nodes
+			//If the ID of the node matches our target, connect.
+			connectToPeer(neighboringNodes.get(i));
+			//Send a message with files to update on the target node.
+			//TODO: Figure out how to send files over and which ones
+		}
+		
 	}
 	/**
 	 * Connect to a peer for the purposes of file sharing
 	 */
-	public void connectToPeer(String targetID)
+	public void connectToPeer(Node targetNode)
 	{
 		try 
 		{
-			pullSocket = pushSocket.accept();
+			//Connect the pull socket on this peer to the push socket on another peer
+			targetNode.pullSocket = this.pushSocket.accept();
 		} 
 		catch (IOException e) 
 		{
@@ -144,6 +154,14 @@ public class Node
 	public Timestamp getTimeStamp()
 	{
 		return this.timestamp;
+	}
+	public Socket getPullSocket()
+	{
+		return this.pullSocket;
+	}
+	public ServerSocket getPushSocket()
+	{
+		return this.pushSocket;
 	}
 	
 }
