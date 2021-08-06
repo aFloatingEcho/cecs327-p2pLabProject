@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -34,6 +35,8 @@ public class DataServer {
 		FileInputStream input = null;
 		// Stream used to buffer the input without calling the system (https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/BufferedInputStream.html)
 		BufferedInputStream inputBuffer = null;
+		// Stream used to output to the socket.
+		OutputStream output = null;
 		boolean running = false;
 		while(!running) {
 			try {
@@ -42,11 +45,26 @@ public class DataServer {
 				// Sending File
 				File fileToSend = new File(this.fileName);
 				byte[] brokenUp = new byte[(int)(fileToSend.length())]; // Break up the file
+				// Wrap the file in buffer before sending.
 				input = new FileInputStream(fileToSend);
+				inputBuffer = new BufferedInputStream(input);
+				inputBuffer.read(brokenUp, 0, brokenUp.length);
+				output = this.connection.getOutputStream();
+				output.write(brokenUp, 0, brokenUp.length);
+				output.flush();
+				running = true;
+				System.out.println("Finished Output.");
 				
 			} catch (IOException e) {
 				System.out.println("Connection failed");
 				e.printStackTrace();
+			}
+			finally {
+				try {
+					this.dataServer.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
