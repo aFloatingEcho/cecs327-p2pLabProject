@@ -58,7 +58,7 @@ public class DataClient {
 		InputStream input = null;
 		// Stream used to output the file (https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/FileOutputStream.html)
 		FileOutputStream output = null;
-		output = new FileOutputStream(this.fileName, true);
+		output = new FileOutputStream(this.fileName);
 		// Stream used to buffer the output without calling the system (https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/BufferedOutputStream.html)
 		BufferedOutputStream outputBuffer = null;
 		System.out.println("Attempt to recieve: " + this.fileName);
