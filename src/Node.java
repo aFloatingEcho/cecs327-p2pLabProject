@@ -1,13 +1,10 @@
-import java.io.File;
 import java.io.IOException;
-import java.net.*;
 import java.sql.Timestamp;
-import java.time.*;
 import java.util.ArrayList;
 
 import Network.NetworkManager;
-import chatThings.Client;
-import chatThings.Server;
+import chatThings.ChatClient;
+import chatThings.ChatServer;
 
 /**
  * A Node on our Peer to Peer Network.  Should begin with a list of local files from a given directory.
@@ -51,8 +48,8 @@ public class Node
 	 */
 	public void connect(String host, int port) {
 		try {
-			new Thread(new Client(host, port)).start();
-			new Thread(new Server(port)).start();
+			new Thread(new ChatClient(host, port)).start();
+			new Thread(new ChatServer(port)).start();
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
