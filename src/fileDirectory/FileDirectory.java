@@ -23,8 +23,8 @@ public class FileDirectory {
 	/**
 	 * convertFileList converts a Filepath into an ArrayList of 
 	 * files inside of that directory that can be used.
-	 * @param listFile
-	 * @return
+	 * @param listFile File
+	 * @return ArrayList<File>
 	 */
 	public ArrayList<File> convertFileList(File listFile){
 		ArrayList<File> listOfFiles = new ArrayList<>();
@@ -38,8 +38,8 @@ public class FileDirectory {
 	/**
 	 * Outputs an agnostic file list that is useful for examining the files
 	 * in the source/target sections.
-	 * @param directoryList
-	 * @return
+	 * @param directoryList ArrayList<File>
+	 * @return ArrayList<String>
 	 */
 	public ArrayList<String> processFileList(ArrayList<File> directoryList){
 		ArrayList<String> listOfFiles = new ArrayList<>();
@@ -52,7 +52,7 @@ public class FileDirectory {
 	/**
 	 * Determines if a file needs to be transfered from the source to the destination.
 	 * @param replacementAge long variable that indicates the time since the file has been replaced
-	 * @param destinationLocation
+	 * @param destinationFile String
 	 * @return boolean value, true if it needs to be replaced, else false if it doesn't.
 	 */
 	public boolean determineShouldBeReplaced(long replacementAge, String destinationFile) {
@@ -76,8 +76,8 @@ public class FileDirectory {
 	
 	/**
 	 * Get the last modified info of a string
-	 * @param FileName
-	 * @return
+	 * @param FileName String
+	 * @return String
 	 */
 	public String getFileAge(String FileName) {
 		long age = new File(this.returnFilePath(FileName)).lastModified();
@@ -86,8 +86,8 @@ public class FileDirectory {
 	
 	/**
 	 * Wrapper to reutrn if a file exists or not
-	 * @param FileName
-	 * @return
+	 * @param FileName String
+	 * @return boolean
 	 */
 	public boolean doesFileExist(String FileName) {
 		File toTest = new File(this.returnFilePath(FileName));
@@ -98,8 +98,8 @@ public class FileDirectory {
 	/**
 	 * Wrapper to check if there is a blank function.
 	 * <p> This should not be called if the file doesn't exist.
-	 * @param FileName
-	 * @return
+	 * @param FileName String
+	 * @return boolean
 	 */
 	public boolean checkTombstone(String FileName) {
 		File toTest = new File(this.returnFilePath(FileName));
@@ -111,8 +111,8 @@ public class FileDirectory {
 	
 	/**
 	 * Returns a specific deliverable when a file is named.
-	 * @param FileName
-	 * @return
+	 * @param FileName String
+	 * @return BufferedOutputStream
 	 */
 	public BufferedOutputStream returnFile(String FileName) {
 		File fileToCopy = null;
@@ -130,16 +130,16 @@ public class FileDirectory {
 	
 	/**
 	 * Funciton that deletes a file and creates a blank file in its tombstone.
-	 * @param FileName
+	 * @param FileName String
 	 */
 	public void deleteFile(String FileName) {
 		String fileToDelete = this.returnFilePath(FileName);
 		File deleteFile = new File(fileToDelete);
-		if(deleteFile.exists()) {
-			deleteFile.delete();
-		}
 		try {
-			deleteFile.createNewFile();
+			if(deleteFile.exists()) {
+				if(deleteFile.delete()) throw new IOException("File not deleted.");
+			}
+			if(!deleteFile.createNewFile()) throw new IOException("File not created.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -147,8 +147,8 @@ public class FileDirectory {
 	
 	/**
 	 * Return absolute file path of a location file.
-	 * @param fileName
-	 * @return
+	 * @param fileName String
+	 * @return String
 	 */
 	public String returnFilePath(String fileName) {
 		return (this.sourceLocation.getAbsolutePath() + fileName);
@@ -156,21 +156,21 @@ public class FileDirectory {
 	
 	/**
 	 * Getters of information of the files in the source directory.
-	 * @return
+	 * @return ArrayList<String>
 	 */
 	public ArrayList<String> getFileList(){
 		return this.listToScan;
 	}
 	/**
 	 * Getters of information of the source directory.
-	 * @return
+	 * @return String
 	 */
 	public String getSourceDirectory() {
 		return this.sourceLocation.getAbsolutePath();
 	}
 	/**
 	 * Getters of the actual Filelist.
-	 * @return
+	 * @return ArrayList<File>
 	 */
 	public ArrayList<File> getActualFileList(){
 		return this.fileList;
