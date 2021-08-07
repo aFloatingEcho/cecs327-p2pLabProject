@@ -87,6 +87,7 @@ public class ChatClient implements Runnable
 		catch (IOException e)
 		{
 			System.out.println("Chat thread Broke :/");
+			e.printStackTrace();
 		}
 		
 	}

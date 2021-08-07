@@ -40,6 +40,7 @@ public class chatClientParser {
 	 */
 //	public String command(String commandInput, String fileInput, String portNumber) {
 	public String command(String commandInput) {
+		System.out.println("Processing Command:" + commandInput);
 		String[] args = commandInput.split("::");
 		String request = args[0];
 		String fileInput = args[1];
@@ -51,12 +52,15 @@ public class chatClientParser {
 			case "CHECK":
 				if(this.syncDirectory.determineShouldBeReplaced(Long.parseLong(portNumber), fileInput)) {
 					reply = "TRUE";
+					break;
 				}
 				reply = "FALSE";
+				break;
 			// Command to delete file.
 			case "DELETE":
-				this.syncDirectory.deleteFile(fileInput);;
+				this.syncDirectory.deleteFile(fileInput);
 				reply = "DONE";
+				break;
 			// Command to accept a new file from the server.
 			case "SEND":
 				try {
@@ -66,8 +70,10 @@ public class chatClientParser {
 					e.printStackTrace();
 				}
 				reply = "DONE";
+				break;
 			case "QUIT":
 				reply = "QUIT";
+				break;
 		}
 		return reply;
 	}
