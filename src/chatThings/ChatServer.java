@@ -55,7 +55,7 @@ public class ChatServer implements Runnable
 		 //Process input and output
 		 String input;
 		 String output;
-		 out.println("Beginning chat: >>>>>>>>>");
+		 System.out.println("Server Active");
 
 		 /* Parser */
 		 // NOTE: the intended source directory to update should be the first argument
