@@ -47,11 +47,10 @@ public class ChatClient implements Runnable
 		//While the exit command has not been entered, display messages from both the user and the server.
 		
 		System.out.println("Connection established!");
-		while ((fromServer = socketIn.readLine()) != null) 
+		while ((fromServer = socketIn.readLine()) != "QUIT") 
 		{
 			//Display a message from the server.
 			System.out.println("Server: " + fromServer);
-
 			/* Parser */
 			// NOTE: the intended source directory to update should be the first argument
 			String sourceDirectory = fromServer.substring(0, fromServer.indexOf("::"));

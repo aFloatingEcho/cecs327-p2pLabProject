@@ -66,14 +66,23 @@ public class ChatServer implements Runnable
 		 // NOTE: the assumption is that the InetAddress host name is the same as the one that was inputted in the Node class
 		 parser = new chatServerParser(new FileDirectory(sourceDirectory), serverSocket.getInetAddress().getHostName());
 
-		 while((input = in.readLine()) != null)
+		 while((parser.currentPosition() != -1))
 		 {
-			 output = sourceDirectory + "::" + parser.sendSingleFileInfo(input);   // command generated
+			 output = parser.getNextFile();   // command generated
 			 //When input is recieved, echo it back to the client.
-			 System.out.println("Server received: " + input);
-//			 output = "Server received: " + input;
-			 out.println(output);   // command sent
+			 System.out.println("Server command: " + output);
+			 String response = in.readLine();
+			 System.out.println("Return:" + response);
+			 if(response == "TRUE") {
+				 int portToSend = (parser.currentPosition() % 50) + 55000; // random port to make sure that all ports are clear
+				 parser.sendSingleFile(output, portToSend);
+				 System.out.println("Command sent!");
+			 }
+			 else {
+				 System.out.println("File does not need to be sent");
+			 }
 		 }
+		 output = parser.sendQuit();
 		 
 	 }
 
