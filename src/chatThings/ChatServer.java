@@ -74,10 +74,11 @@ public class ChatServer implements Runnable
 			 out.println(output);
 			 String response = in.readLine();
 			 System.out.println("Return:" + response);
-			 if(response == "TRUE") {
+			 if(response.equals("TRUE")) {
 				 int portToSend = (parser.currentPosition() % 50) + 55000; // random port to make sure that all ports are clear
-				 parser.sendSingleFile(output, portToSend);
+				 out.println(parser.sendSingleFileTransferDetails(portToSend));
 				 System.out.println("Command sent!");
+				 parser.sendSingleFile(output, portToSend);
 			 }
 			 else {
 				 System.out.println("File does not need to be sent");
