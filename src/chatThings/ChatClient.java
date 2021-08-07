@@ -54,9 +54,9 @@ public class ChatClient implements Runnable
 			/* Parser */
 			// NOTE: the intended source directory to update should be the first argument
 			String sourceDirectory = fromServer.substring(0, fromServer.indexOf("::"));
-			parser = new chatClientParser(new FileDirectory(sourceDirectory), hostName);
+			parser = new chatClientParser(new FileDirectory("sync\\"), hostName);
 			// the 2 gives the parser the rest of the arguments
-			fromClient = parser.command(fromServer.substring(fromServer.indexOf("::") + 2));
+			fromClient = parser.command(fromServer);
 
 			//Take user input, and display it.  out.println() finally sends the message to the server via the socket.
 //		    fromClient = systemIn.readLine();
