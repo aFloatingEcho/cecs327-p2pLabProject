@@ -41,6 +41,7 @@ public class ChatClient implements Runnable
 		String fromClient;
 		
 		//Create a socket, and attempt to connect to the targeted host's port number.  
+		System.out.println(hostName + " " + portNum);
 		clientSocket = new Socket(hostName, portNum);
 		out = new PrintWriter(clientSocket.getOutputStream(), true);
 		socketIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -53,10 +54,10 @@ public class ChatClient implements Runnable
 			System.out.println("Server: " + fromServer);
 			/* Parser */
 			// NOTE: the intended source directory to update should be the first argument
-			String sourceDirectory = fromServer.substring(0, fromServer.indexOf("::"));
+			String sourceDirectory = "sync\\";
 			parser = new chatClientParser(new FileDirectory(sourceDirectory), hostName);
 			// the 2 gives the parser the rest of the arguments
-			fromClient = parser.command(fromServer.substring(fromServer.indexOf("::") + 2));
+			fromClient = parser.command(fromServer);
 
 			//Take user input, and display it.  out.println() finally sends the message to the server via the socket.
 //		    fromClient = systemIn.readLine();
@@ -87,6 +88,7 @@ public class ChatClient implements Runnable
 		catch (IOException e)
 		{
 			System.out.println("Chat thread Broke :/");
+			e.printStackTrace();
 		}
 		
 	}
