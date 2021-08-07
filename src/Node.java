@@ -24,6 +24,8 @@ public class Node
 	/** Nodes that this object has a direct connection to */
 	private ArrayList<Node> neighboringNodes;
 	private ArrayList<String> localReachableIPs;
+	// Hardcoded Port Used for all addresses
+	private int mainPort = 5555;
 //	private ArrayList<InetAddress> localReachableIPs;
 
 	/**Timestamp for the purposes of determining which node is the oldest.*/
@@ -43,39 +45,45 @@ public class Node
 		} catch(InterruptedException e) {
 			e.printStackTrace();
 		}
+		new Thread(new ChatServer(this.mainPort)).start();
+		// use for the initial user input, then never ask for user input again
+//		new Thread(new ChatServer(port, "sync\\")).start();
 		this.timestamp = new Timestamp(System.currentTimeMillis());
 	}
 	
 	/**
 	 * Connects a new Client and a new Server for communication.
+	 * @throws IOException 
 	 */
-	public void connect(String host, int port) {
-		try {
+	public void connect(String host, int port) throws IOException {
 			new Thread(new ChatClient(host, port)).start();
 //			for(InetAddress address : localReachableIPs) {
 //				new Thread(new ChatClient(address.getHostName(), port)).start();
 //			}
-			new Thread(new ChatServer(port)).start();
-			// use for the initial user input, then never ask for user input again
-//			new Thread(new ChatServer(port, "sync\\")).start();
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	/**
 	 * Leave the network, closing any open connections and ports.
 	 */
-	public void leaveNetwork() {}
+	public void leaveNetwork() {
+		
+	}
 	
 	/**
 	 * Finds neighbors to directly connect to, perhaps utilizing some structure or a mesh.  
 	 * Search for any node also running this program, then ask it for any nodes it knows and add to the list.
 	 */
-	public void findNeighbors()
+	public void findNeighbors(int port)
 	{
 		/*This method needs to broadcast to the network looking for nodes also running this program.  When it finds one, it should ask
 		//that node for the details of other nodes connected to the network.   */
+		for(String eachAddress: this.localReachableIPs) {
+			try {
+				this.connect(eachAddress, port);
+			} catch(IOException e){
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
