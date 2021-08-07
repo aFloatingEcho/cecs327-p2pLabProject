@@ -89,13 +89,12 @@ public class chatServerParser {
 	/**
 	 * Command to send out the actual file by opening a socket that the client will
 	 * <p> connect to in order to obtain the broadcast.
-	 * @param fileToSend String
 	 * @param portNumber int
 	 * @return boolean
 	 */
 	public boolean sendSingleFile(String fileToSend, int portNumber) {
 		try {
-			DataServer sendFile = new DataServer(portNumber, fileToSend);
+			DataServer sendFile = new DataServer(portNumber, this.syncDirectory.returnFilePath(fileToSend));
 			sendFile.transferFile();
 			return true;
 		} catch (IOException e) {
