@@ -64,7 +64,7 @@ public class chatClientParser {
 			// Command to accept a new file from the server.
 			case "SEND":
 				try {
-					DataClient getFile = new DataClient(Integer.parseInt(portNumber), fileInput, this.hostName);
+					DataClient getFile = new DataClient(Integer.parseInt(portNumber), this.syncDirectory.returnFilePath(fileInput), this.hostName);
 					getFile.acceptFile();
 				} catch (NumberFormatException | IOException e) {
 					e.printStackTrace();
