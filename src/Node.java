@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.net.InetAddress;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -23,7 +24,8 @@ public class Node
 	/** Nodes that this object has a direct connection to */
 	private ArrayList<Node> neighboringNodes;
 	private ArrayList<String> localReachableIPs;
-	
+//	private ArrayList<InetAddress> localReachableIPs;
+
 	/**Timestamp for the purposes of determining which node is the oldest.*/
 	private Timestamp timestamp;
 
@@ -37,6 +39,7 @@ public class Node
 		neighboringNodes = new ArrayList<>();
 		try {
 			this.localReachableIPs = (ArrayList<String>) networkManager.getAllLocalIPAddresses();
+//			this.localReachableIPs = (ArrayList<InetAddress>) networkManager.getAllLocalIPAddresses();
 		} catch(InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -49,6 +52,9 @@ public class Node
 	public void connect(String host, int port) {
 		try {
 			new Thread(new ChatClient(host, port)).start();
+//			for(InetAddress address : localReachableIPs) {
+//				new Thread(new ChatClient(address.getHostName(), port)).start();
+//			}
 			new Thread(new ChatServer(port)).start();
 			// use for the initial user input, then never ask for user input again
 //			new Thread(new ChatServer(port, "sync\\")).start();
