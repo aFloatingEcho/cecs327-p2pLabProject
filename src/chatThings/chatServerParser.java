@@ -83,6 +83,9 @@ public class chatServerParser {
 	 * @return
 	 */
 	public String sendSingleFileTransferDetails(int portNo) {
+		if(this.getPosition == -1) {
+			return "QUIT";
+		}
 		return ("SEND::" + this.syncDirectory.getFileList().get(this.getPosition) + "::" + portNo);
 	}
 	
