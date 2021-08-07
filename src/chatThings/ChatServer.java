@@ -71,6 +71,7 @@ public class ChatServer implements Runnable
 			 output = parser.getNextFile();   // command generated
 			 //When input is recieved, echo it back to the client.
 			 System.out.println("Server command: " + output);
+			 out.println(output);
 			 String response = in.readLine();
 			 System.out.println("Return:" + response);
 			 if(response == "TRUE") {
