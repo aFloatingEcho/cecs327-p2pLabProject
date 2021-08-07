@@ -96,6 +96,20 @@ public class FileDirectory {
 	}
 	
 	/**
+	 * Wrapper to check if there is a blank function.
+	 * <p> This should not be called if the file doesn't exist.
+	 * @param FileName
+	 * @return
+	 */
+	public boolean checkTombstone(String FileName) {
+		File toTest = new File(this.returnFilePath(FileName));
+		if(toTest.length() == 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
 	 * Returns a specific deliverable when a file is named.
 	 * @param FileName
 	 * @return
