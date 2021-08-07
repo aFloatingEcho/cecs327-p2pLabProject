@@ -76,6 +76,17 @@ public class chatServerParser {
 	}
 	
 	/**
+	 * Command to send details on how to transfer a file.
+	 * that monster of a code comes from the getNextFile systme
+	 * @param fileToSend
+	 * @param portNo
+	 * @return
+	 */
+	public String sendSingleFileTransferDetails(int portNo) {
+		return ("SEND::" + this.sendSingleFileInfo(this.syncDirectory.getFileList().get(this.getPosition)) + "::" + portNo);
+	}
+	
+	/**
 	 * Command to send out the actual file by opening a socket that the client will
 	 * <p> connect to in order to obtain the broadcast.
 	 * @param fileToSend String
