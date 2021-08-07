@@ -29,7 +29,7 @@ public class chatServerParser {
 	}
 	
 	/**
-	 * Command to send out files.
+	 * Command to send out file info.
 	 * @param fileToSend
 	 * @return
 	 */
@@ -41,6 +41,23 @@ public class chatServerParser {
 		String command = "CHECK::" + fileToSend + "::";
 		command += this.syncDirectory.getFileAge(fileToSend);
 		return command;
+	}
+	
+	/**
+	 * Command to send out the actual file.
+	 * @param fileToSend
+	 * @return
+	 */
+	public boolean sendSingleFile(String fileToSend, int portNumber) {
+		try {
+			DataServer sendFile = new DataServer(portNumber, fileToSend);
+			sendFile.transferFile();
+			return true;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 
