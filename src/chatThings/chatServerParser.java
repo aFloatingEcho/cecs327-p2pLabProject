@@ -33,9 +33,15 @@ public class chatServerParser {
 	 * @param fileToSend
 	 * @return
 	 */
-	public String sendFileInfo(String fileToSend) {
+	public String sendSingleFileInfo(String fileToSend) {
+		if(this.syncDirectory.checkTombstone(fileToSend)) {
+			String command = "DELETE::" + fileToSend + "::00";
+			return command;
+		}
 		String command = "CHECK::" + fileToSend + "::";
 		command += this.syncDirectory.getFileAge(fileToSend);
 		return command;
 	}
+	
+
 }
