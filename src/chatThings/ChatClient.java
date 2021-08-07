@@ -1,5 +1,7 @@
 package chatThings;
 
+import fileDirectory.FileDirectory;
+
 import java.io.*;
 import java.net.*;
 
@@ -9,6 +11,7 @@ public class ChatClient implements Runnable
 	private PrintWriter out; 
 	private BufferedReader socketIn;
 	private BufferedReader systemIn;
+	private chatClientParser parser;
 	
 	String hostName;
 	int portNum;
@@ -42,10 +45,17 @@ public class ChatClient implements Runnable
 		while ((fromServer = socketIn.readLine()) != null) 
 		{
 			//Display a message from the server.
-			System.out.println("Server: " + fromServer);		   
+			System.out.println("Server: " + fromServer);
+
+			/* Parser */
+			// NOTE: the intended source directory to update should be the first argument
+			String sourceDirectory = fromServer.substring(0, fromServer.indexOf("::"));
+			parser = new chatClientParser(new FileDirectory(sourceDirectory), hostName);
+			// the 2 gives the parser the rest of the arguments
+			fromClient = parser.command(fromServer.substring(fromServer.indexOf("::") + 2));
 
 			//Take user input, and display it.  out.println() finally sends the message to the server via the socket.
-		    fromClient = systemIn.readLine();
+//		    fromClient = systemIn.readLine();
 		    if (fromClient != null) 
 		    {
 		        System.out.println("Client: " + fromClient);
@@ -75,6 +85,10 @@ public class ChatClient implements Runnable
 			System.out.println("Chat thread Broke :/");
 		}
 		
+	}
+
+	public chatClientParser getChatClientParser() {
+		return parser;
 	}
 	
 }
