@@ -86,7 +86,9 @@ public class chatServerParser {
 		if(this.getPosition == -1) {
 			return "QUIT";
 		}
-		return ("SEND::" + this.syncDirectory.getFileList().get(this.getPosition) + "::" + portNo);
+		// You might be wondering, "why is this -1". That's because otherwise it'll send the wrong file over.
+		// Oops. No wonder the program breaks it. Anyways now you know why coding is a huge pain in the ass.
+		return ("SEND::" + this.syncDirectory.getFileList().get(this.getPosition - 1) + "::" + portNo);
 	}
 	
 	/**
