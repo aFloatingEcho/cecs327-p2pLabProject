@@ -55,7 +55,7 @@ public class chatClientParser {
 				reply = "FALSE";
 			// Command to delete file.
 			case "DELETE":
-				this.syncDirectory.deleteFile(fileInput);;
+				this.syncDirectory.deleteFile(fileInput);
 				reply = "DONE";
 			// Command to accept a new file from the server.
 			case "SEND":
