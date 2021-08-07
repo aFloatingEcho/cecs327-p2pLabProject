@@ -60,5 +60,8 @@ public class chatServerParser {
 		return false;
 	}
 	
+	public String sendQuit() {
+		return "QUIT";
+	}
 
 }
