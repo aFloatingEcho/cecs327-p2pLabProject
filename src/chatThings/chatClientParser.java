@@ -16,8 +16,6 @@ public class chatClientParser {
 	
 	private FileDirectory syncDirectory;
 	private String hostName;
-
-
 	
 	/**
 	 * Parser for chat commands.

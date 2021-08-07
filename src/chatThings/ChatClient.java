@@ -15,8 +15,13 @@ public class ChatClient implements Runnable
 	
 	String hostName;
 	int portNum;
-	
-	
+
+	/**
+	 * Overloaded constructor for a specific host and port number
+	 * @param hostName String
+	 * @param portNum int
+	 * @throws IOException
+	 */
 	public ChatClient(String hostName, int portNum) throws IOException
 	{
 		this.hostName = hostName;
@@ -87,6 +92,10 @@ public class ChatClient implements Runnable
 		
 	}
 
+	/**
+	 * Returns the parser for this Client
+	 * @return chatClientParser
+	 */
 	public chatClientParser getChatClientParser() {
 		return parser;
 	}

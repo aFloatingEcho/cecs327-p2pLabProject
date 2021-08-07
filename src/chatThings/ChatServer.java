@@ -13,22 +13,34 @@ public class ChatServer implements Runnable
 	 BufferedReader in;
 	 chatServerParser parser;
 	 String directoryToWatch;
-	  
-	 public ChatServer(int portNum) throws IOException
+
+	/**
+	 * Overloaded constructor assigns the server socket to a port number
+	 * @param portNum
+	 * @throws IOException
+	 */
+	public ChatServer(int portNum) throws IOException
 	 {
 		 serverSocket = new ServerSocket(portNum);
 	 }
 
+	/**
+	 * Overloaded constructor assigns the server socket to a port number and watches a specific directory
+	 * @param portNum int
+	 * @param directoryToWatch String
+	 * @throws IOException
+	 */
 	public ChatServer(int portNum, String directoryToWatch) throws IOException
 	{
 		serverSocket = new ServerSocket(portNum);
 		this.directoryToWatch = directoryToWatch;
 	}
 	 
-	 /*
+	 /**
 	  * Method that lets the server listen for incoming connections, and once a connection is made, facilitates communication back and forth.
 	  * A lot of the system.out text is meant as debugging, will likely not be necessary for the final product.  
 	  * Current implementation involves repeating an incoming message to the connected client.
+	  * @throws IOException
 	  */
 	 public void listenAndProvideService() throws IOException
 	 {
@@ -84,6 +96,10 @@ public class ChatServer implements Runnable
 		
 	}
 
+	/**
+	 * Returns the parser for this Server
+	 * @return chatServerParser
+	 */
 	public chatServerParser getChatServerParser() {
 		return parser;
 	}
