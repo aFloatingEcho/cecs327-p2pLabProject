@@ -85,6 +85,7 @@ public class ChatServer implements Runnable
 			 }
 		 }
 		 output = parser.sendQuit();
+		 out.println(output);
 		 
 	 }
 
