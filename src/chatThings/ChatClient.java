@@ -5,10 +5,6 @@ import java.net.*;
 
 public class ChatClient implements Runnable
 {
-
-	
-	
-	
 	private Socket clientSocket;
 	private PrintWriter out; 
 	private BufferedReader socketIn;
