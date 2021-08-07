@@ -3,7 +3,7 @@ package chatThings;
 import java.io.*;
 import java.net.*;
 
-public class Client implements Runnable
+public class ChatClient implements Runnable
 {
 
 	
@@ -18,7 +18,7 @@ public class Client implements Runnable
 	int portNum;
 	
 	
-	public Client(String hostName, int portNum) throws UnknownHostException, IOException
+	public ChatClient(String hostName, int portNum) throws UnknownHostException, IOException
 	{
 		this.hostName = hostName;
 		this.portNum = portNum;
