@@ -23,8 +23,8 @@ public class chatClientParser {
 	 * <p> COMMAND::[FILE_NAME]::[INT VARIABLE (see next line)]
 	 * <p> INT VARIABLE: long for file age if declaring file, int of port if transferring file.
 	 * 
-	 * @param syncDirectory
-	 * @param hostName
+	 * @param syncDirectory FileDirectory
+	 * @param hostName String
 	 */
 	public chatClientParser(FileDirectory syncDirectory, String hostName) {
 		this.syncDirectory = syncDirectory;
@@ -33,10 +33,10 @@ public class chatClientParser {
 	
 	/**
 	 * Parser that reads the commands directly.
-	 * @param commandInput
-	 * @param fileInput
-	 * @param portNumber
-	 * @return
+	 * @param commandInput String
+	 * @param fileInput String
+	 * @param portNumber String
+	 * @return String
 	 */
 	public String command(String commandInput, String fileInput, String portNumber) {
 		String reply = null;
