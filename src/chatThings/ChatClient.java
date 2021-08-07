@@ -18,7 +18,7 @@ public class ChatClient implements Runnable
 	int portNum;
 	
 	
-	public ChatClient(String hostName, int portNum) throws UnknownHostException, IOException
+	public ChatClient(String hostName, int portNum) throws IOException
 	{
 		this.hostName = hostName;
 		this.portNum = portNum;
