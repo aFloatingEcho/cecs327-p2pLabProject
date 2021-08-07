@@ -23,8 +23,8 @@ public class chatServerParser {
 	 * <p> COMMAND::[FILE_NAME]::[INT VARIABLE (see next line)]
 	 * <p> INT VARIABLE: long for file age if declaring file, int of port if transferring file.
 	 * 
-	 * @param syncDirectory
-	 * @param hostName
+	 * @param syncDirectory FileDirectory
+	 * @param hostName String
 	 */
 	public chatServerParser(FileDirectory syncDirectory, String hostName) {
 		this.syncDirectory = syncDirectory;
@@ -42,7 +42,7 @@ public class chatServerParser {
 	
 	/**
 	 * Returns command string of the next file in line.
-	 * @return
+	 * @return String
 	 */
 	public String getNextFile() {
 		// Sets position to 0 to avoid an error
@@ -62,8 +62,8 @@ public class chatServerParser {
 	 * Command to send out file info.
 	 * <p> It remains public only for diagnosis purposes. You shouldn't be using it in the loop-
 	 * <p> chatServerParser.getNextInfo() in conjunction with chatServerParser.currentPosition should be used.
-	 * @param fileToSend
-	 * @return
+	 * @param fileToSend String
+	 * @return String
 	 */
 	public String sendSingleFileInfo(String fileToSend) {
 		if(this.syncDirectory.checkTombstone(fileToSend)) {
@@ -78,8 +78,9 @@ public class chatServerParser {
 	/**
 	 * Command to send out the actual file by opening a socket that the client will
 	 * <p> connect to in order to obtain the broadcast.
-	 * @param fileToSend
-	 * @return
+	 * @param fileToSend String
+	 * @param portNumber int
+	 * @return boolean
 	 */
 	public boolean sendSingleFile(String fileToSend, int portNumber) {
 		try {
