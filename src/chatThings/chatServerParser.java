@@ -93,7 +93,11 @@ public class chatServerParser {
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Quit command
+	 * @return String
+	 */
 	public String sendQuit() {
 		return "QUIT";
 	}

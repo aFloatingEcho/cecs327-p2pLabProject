@@ -50,6 +50,8 @@ public class Node
 		try {
 			new Thread(new ChatClient(host, port)).start();
 			new Thread(new ChatServer(port)).start();
+			// use for the initial user input, then never ask for user input again
+//			new Thread(new ChatServer(port, "sync\\")).start();
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
