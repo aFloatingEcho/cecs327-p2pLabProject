@@ -44,6 +44,7 @@ public class DataServer {
 			try {
 				this.connection = this.dataServer.accept();
 				System.out.println("Connection Accepted: " + this.connection);
+				System.out.println("Trasfering:" + fileName);
 				// Sending File
 				File fileToSend = new File(this.fileName);
 				byte[] brokenUp = new byte[(int)(fileToSend.length())]; // Break up the file
