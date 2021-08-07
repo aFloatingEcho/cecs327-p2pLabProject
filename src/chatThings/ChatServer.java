@@ -1,5 +1,7 @@
 package chatThings;
 
+import fileDirectory.FileDirectory;
+
 import java.io.*;
 import java.net.*;
 
@@ -9,11 +11,19 @@ public class ChatServer implements Runnable
 	 Socket clientSocket;
 	 PrintWriter out;
 	 BufferedReader in;
+	 chatServerParser parser;
+	 String directoryToWatch;
 	  
 	 public ChatServer(int portNum) throws IOException
 	 {
 		 serverSocket = new ServerSocket(portNum);
 	 }
+
+	public ChatServer(int portNum, String directoryToWatch) throws IOException
+	{
+		serverSocket = new ServerSocket(portNum);
+		this.directoryToWatch = directoryToWatch;
+	}
 	 
 	 /*
 	  * Method that lets the server listen for incoming connections, and once a connection is made, facilitates communication back and forth.
@@ -34,14 +44,23 @@ public class ChatServer implements Runnable
 		 String input;
 		 String output;
 		 out.println("Beginning chat: >>>>>>>>>");
-		 
+
+		 /* Parser */
+		 // NOTE: the intended source directory to update should be the first argument
+		 String sourceDirectory = "sync\\";
+		 // or
+//		 String sourceDirectory = directoryToWatch;
+
+		 // NOTE: the assumption is that the InetAddress host name is the same as the one that was inputted in the Node class
+		 parser = new chatServerParser(new FileDirectory(sourceDirectory), serverSocket.getInetAddress().getHostName());
+
 		 while((input = in.readLine()) != null)
 		 {
+			 output = sourceDirectory + "::" + parser.sendSingleFileInfo(input);   // command generated
 			 //When input is recieved, echo it back to the client.
 			 System.out.println("Server received: " + input);
-			 output = "Server received: " + input;
-			 out.println(output);
-			 
+//			 output = "Server received: " + input;
+			 out.println(output);   // command sent
 		 }
 		 
 	 }
@@ -63,6 +82,10 @@ public class ChatServer implements Runnable
 			System.out.println("Listen thread broke :/");
 		}
 		
+	}
+
+	public chatServerParser getChatServerParser() {
+		return parser;
 	}
 	
 }
