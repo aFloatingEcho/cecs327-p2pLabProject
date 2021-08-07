@@ -83,7 +83,7 @@ public class chatServerParser {
 	 * @return
 	 */
 	public String sendSingleFileTransferDetails(int portNo) {
-		return ("SEND::" + this.sendSingleFileInfo(this.syncDirectory.getFileList().get(this.getPosition)) + "::" + portNo);
+		return ("SEND::" + this.syncDirectory.getFileList().get(this.getPosition) + "::" + portNo);
 	}
 	
 	/**
