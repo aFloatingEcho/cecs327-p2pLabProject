@@ -63,7 +63,9 @@ public class DataServer {
 			}
 			finally {
 				try {
-					this.dataServer.close();
+					if(running) {
+						this.dataServer.close();
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
