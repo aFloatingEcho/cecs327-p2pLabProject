@@ -63,6 +63,7 @@ public class Node
 	 * Main runnable program for the entire node.
 	 */
 	public void runNode() {
+		this.commandThreads = Executors.newFixedThreadPool((this.localReachableIPs.size() * 2));
 		try {
 			this.commandThreads.submit(new Thread(new ChatServer(this.mainPort, directoryToScan,this.commandThreads)));
 		} catch (IOException e) {
@@ -84,7 +85,6 @@ public class Node
 		}
 		// Restart executor pool when the running is complete.
 		this.commandThreads.shutdown();
-		this.commandThreads = Executors.newFixedThreadPool((this.localReachableIPs.size() * 2));
 	}
 	
 	/**
