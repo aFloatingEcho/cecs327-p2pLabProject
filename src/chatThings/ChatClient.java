@@ -12,6 +12,7 @@ public class ChatClient implements Runnable
 	private BufferedReader socketIn;
 	private BufferedReader systemIn;
 	private chatClientParser parser;
+	private volatile boolean running = true;
 	
 	String hostName;
 	int portNum;
@@ -44,10 +45,11 @@ public class ChatClient implements Runnable
 		clientSocket = new Socket(hostName, portNum);
 		out = new PrintWriter(clientSocket.getOutputStream(), true);
 		socketIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+		running = true;
 		//While the exit command has not been entered, display messages from both the user and the server.
-		
 		System.out.println("Connection established!");
-		while (!(fromServer = socketIn.readLine()).equals("QUIT")) 
+		while (!(fromServer = socketIn.readLine()).equals("QUIT") && running)
 		{
 			//Display a message from the server.
 			System.out.println("Server: " + fromServer);
@@ -86,11 +88,13 @@ public class ChatClient implements Runnable
 		}
 		catch(ConnectException e) {
 			System.out.println("Failed to connect to:" + this.hostName);
+			running = false;
 			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
 			System.out.println("Chat thread Broke :/");
+			running = false;
 			e.printStackTrace();
 		}
 		
