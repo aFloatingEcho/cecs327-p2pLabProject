@@ -16,6 +16,7 @@ public class FileDirectory {
 	
 	public FileDirectory(String sourceDirectory){
 		this.sourceLocation = new File(sourceDirectory);
+		sourceLocation.mkdir();
 		this.fileList = this.convertFileList(this.sourceLocation);
 		this.listToScan = this.processFileList(this.fileList);
 	}
