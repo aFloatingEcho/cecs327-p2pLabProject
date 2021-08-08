@@ -83,7 +83,7 @@ public class ChatClient implements Runnable
 	{
 		try 
 		{
-			System.out.println("Chatting thread! with" + hostName);
+			System.out.println("Chatting thread! with " + hostName);
 			this.chatWithOther();
 		}
 		catch(ConnectException e) {
