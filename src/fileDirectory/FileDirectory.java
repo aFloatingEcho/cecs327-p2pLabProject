@@ -138,7 +138,7 @@ public class FileDirectory {
 		File deleteFile = new File(fileToDelete);
 		try {
 			if(deleteFile.exists()) {
-				if(deleteFile.delete()) throw new IOException("File not deleted.");
+				if(!deleteFile.delete()) throw new IOException("File not deleted.");
 			}
 			if(!deleteFile.createNewFile()) throw new IOException("File not created.");
 		} catch (IOException e) {
