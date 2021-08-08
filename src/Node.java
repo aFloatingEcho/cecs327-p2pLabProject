@@ -2,6 +2,9 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import Network.NetworkManager;
 import chatThings.ChatClient;
@@ -27,6 +30,9 @@ public class Node
 	// Hardcoded Port Used for all addresses
 	private int mainPort = 5555;
 //	private ArrayList<InetAddress> localReachableIPs;
+	private String directoryToScan;
+	
+	private ExecutorService commandThreads;
 
 	/**Timestamp for the purposes of determining which node is the oldest.*/
 	private Timestamp timestamp;
@@ -45,10 +51,40 @@ public class Node
 		} catch(InterruptedException e) {
 			e.printStackTrace();
 		}
-		new Thread(new ChatServer(this.mainPort)).start();
+		// Creates as many threads as there are connections.
+		// I'll probably end up overtaking how many threads but we are just going to live with that.
+		this.commandThreads = Executors.newFixedThreadPool((this.localReachableIPs.size() * 2));
 		// use for the initial user input, then never ask for user input again
 //		new Thread(new ChatServer(port, "sync\\")).start();
 		this.timestamp = new Timestamp(System.currentTimeMillis());
+	}
+	
+	/**
+	 * Main runnable program for the entire node.
+	 */
+	public void runNode() {
+		try {
+			this.commandThreads.submit(new Thread(new ChatServer(this.mainPort, directoryToScan,this.commandThreads)));
+		} catch (IOException e) {
+			System.out.println("LISTENER FAILURE");
+			e.printStackTrace();
+		}
+		for(String eachAddress: this.localReachableIPs) {
+			try {
+				this.connect(eachAddress, this.mainPort);
+			} catch(IOException e){
+				System.out.println("Connection to " + eachAddress + " failed!");
+			}
+		}
+		try {
+			this.commandThreads.awaitTermination(60000L, TimeUnit.MILLISECONDS); // Hardcutoff.
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// Restart executor pool when the running is complete.
+		this.commandThreads.shutdown();
+		this.commandThreads = Executors.newFixedThreadPool((this.localReachableIPs.size() * 2));
 	}
 	
 	/**
@@ -56,7 +92,7 @@ public class Node
 	 * @throws IOException 
 	 */
 	public void connect(String host, int port) throws IOException {
-			new Thread(new ChatClient(host, port)).start();
+			this.commandThreads.submit(new Thread(new ChatClient(host, port)));
 //			for(InetAddress address : localReachableIPs) {
 //				new Thread(new ChatClient(address.getHostName(), port)).start();
 //			}

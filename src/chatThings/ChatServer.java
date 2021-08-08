@@ -4,6 +4,10 @@ import fileDirectory.FileDirectory;
 
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 
 public class ChatServer implements Runnable
 {
@@ -13,15 +17,17 @@ public class ChatServer implements Runnable
 	 BufferedReader in;
 	 chatServerParser parser;
 	 String directoryToWatch;
+	 private ExecutorService commandThreads;
 
 	/**
 	 * Overloaded constructor assigns the server socket to a port number
 	 * @param portNum
 	 * @throws IOException
 	 */
-	public ChatServer(int portNum) throws IOException
+	public ChatServer(int portNum, ExecutorService command) throws IOException
 	 {
 		 serverSocket = new ServerSocket(portNum);
+		 this.commandThreads = command;
 	 }
 
 	/**
@@ -30,10 +36,11 @@ public class ChatServer implements Runnable
 	 * @param directoryToWatch String
 	 * @throws IOException
 	 */
-	public ChatServer(int portNum, String directoryToWatch) throws IOException
+	public ChatServer(int portNum, String directoryToWatch, ExecutorService command) throws IOException
 	{
 		serverSocket = new ServerSocket(portNum);
 		this.directoryToWatch = directoryToWatch;
+		this.commandThreads = command;
 	}
 	 
 	 /**
