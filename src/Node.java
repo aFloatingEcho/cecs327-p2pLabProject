@@ -92,7 +92,7 @@ public class Node
 	 * @throws IOException 
 	 */
 	public void connect(String host, int port) throws IOException {
-			this.commandThreads.submit(new Thread(new ChatClient(host, port)));
+			new ChatClient(host, port);
 //			for(InetAddress address : localReachableIPs) {
 //				new Thread(new ChatClient(address.getHostName(), port)).start();
 //			}
