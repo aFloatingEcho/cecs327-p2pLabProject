@@ -105,8 +105,8 @@ public class ChatServer implements Runnable
 				Socket newConnection = serverSocket.accept();
 				this.commandThreads.submit(new Thread(new chatThread(newConnection, this)));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				break;
 			}
 		}
 	}
@@ -120,25 +120,33 @@ public class ChatServer implements Runnable
 	}
 	
 	public class chatThread implements Runnable{
-		
+		Socket input;
+		ChatServer application;
+
 		public chatThread(Socket input, ChatServer application) {
-			this.run(input, application);
+			this.input = input;
+			this.application = application;
+//			this.run(input, application);
 		}
 		
-		public void run(Socket input, ChatServer application) {
+//		public void run(Socket input, ChatServer application) {
+//			System.out.println("Connected to: " + input.getInetAddress());
+//			try {
+//				application.listenAndProvideService(input);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+
+		@Override
+		public void run() {
 			System.out.println("Connected to: " + input.getInetAddress());
 			try {
 				application.listenAndProvideService(input);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			
 		}
 	}
 	
