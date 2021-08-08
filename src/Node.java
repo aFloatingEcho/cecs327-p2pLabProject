@@ -63,9 +63,9 @@ public class Node
 	 * Main runnable program for the entire node.
 	 */
 	public void runNode() {
-		this.commandThreads = Executors.newFixedThreadPool((this.localReachableIPs.size() * 2));
+//		this.commandThreads = Executors.newFixedThreadPool((this.localReachableIPs.size() * 2));   // extra initialization
 		try {
-			this.commandThreads.submit(new Thread(new ChatServer(this.mainPort, directoryToScan,this.commandThreads)));
+			this.commandThreads.submit(new Thread(new ChatServer(this.mainPort, directoryToScan, this.commandThreads)));
 		} catch (IOException e) {
 			System.out.println("LISTENER FAILURE");
 			e.printStackTrace();
@@ -78,13 +78,13 @@ public class Node
 			}
 		}
 		try {
-			this.commandThreads.awaitTermination(60000L, TimeUnit.MILLISECONDS); // Hardcutoff.
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			if(this.commandThreads.awaitTermination(60000L, TimeUnit.MILLISECONDS))   // Hardcutoff.
+				throw new Exception("TIMEOUT REACHED");
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		// Restart executor pool when the running is complete.
-		this.commandThreads.shutdown();
+//		this.commandThreads.shutdown();
 	}
 	
 	/**
