@@ -90,8 +90,9 @@ public class ChatClient implements Runnable
 			System.out.println("Failed to connect to:" + this.hostName);
 			System.out.println("CE: " + Thread.currentThread().getState());
 			running = false;
+			System.out.println("CE2: " + Thread.currentThread().getState());
 			Thread.currentThread().stop();
-			System.out.println("CE: " + Thread.currentThread().getState());
+			System.out.println("CE3: " + Thread.currentThread().getState());
 			e.printStackTrace();
 		}
 		catch (IOException e)
@@ -99,6 +100,9 @@ public class ChatClient implements Runnable
 			System.out.println("Chat thread Broke :/");
 			System.out.println("IO: " + Thread.currentThread().getState());
 			running = false;
+			System.out.println("IO2: " + Thread.currentThread().getState());
+			Thread.currentThread().stop();
+			System.out.println("IO3: " + Thread.currentThread().getState());
 			e.printStackTrace();
 		}
 		
