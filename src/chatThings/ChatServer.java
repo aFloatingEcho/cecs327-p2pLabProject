@@ -100,14 +100,18 @@ public class ChatServer implements Runnable
 	@Override
 	public void run() 
 	{
-		while(true) {
+		long start = System.currentTimeMillis();
+		long end = start + 61 * 1000;
+		while(start < end) {
 			 try {
 				Socket newConnection = serverSocket.accept();
 				this.commandThreads.submit(new Thread(new chatThread(newConnection, this)));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				System.currentTimeMillis();
 				e.printStackTrace();
 			}
+			 start = System.currentTimeMillis();
 		}
 	}
 
