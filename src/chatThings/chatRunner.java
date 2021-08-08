@@ -14,7 +14,7 @@ public class chatRunner {
 		String targetHostName = "PLACEHOLDER";
 		
 
-		ChatServer chatServer = new ChatServer(port);
+		// ChatServer chatServer = new ChatServer(port);
 		ChatClient chatClient = new ChatClient(targetHostName, port);
 		
 		new Thread(chatClient, "Client").start();
