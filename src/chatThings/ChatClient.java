@@ -90,6 +90,8 @@ public class ChatClient implements Runnable
 			System.out.println("Failed to connect to:" + this.hostName);
 			System.out.println("CE: " + Thread.currentThread().getState());
 			running = false;
+			Thread.currentThread().stop();
+			System.out.println("CE: " + Thread.currentThread().getState());
 			e.printStackTrace();
 		}
 		catch (IOException e)
