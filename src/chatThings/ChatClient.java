@@ -84,6 +84,9 @@ public class ChatClient implements Runnable
 			System.out.println("Chatting thread!");
 			this.chatWithOther();
 		}
+		catch(ConnectException e) {
+			System.out.println("Failed to connect to:" + this.hostName);
+		}
 		catch (IOException e)
 		{
 			System.out.println("Chat thread Broke :/");
