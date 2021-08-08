@@ -84,7 +84,7 @@ public class Node
 			e.printStackTrace();
 		}
 		// Restart executor pool when the running is complete.
-//		this.commandThreads.shutdown();
+		this.commandThreads.shutdown();
 	}
 	
 	/**
