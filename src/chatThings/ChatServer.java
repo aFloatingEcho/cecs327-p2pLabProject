@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 public class ChatServer implements Runnable
 {
 	 ServerSocket serverSocket;
-	 Socket clientSocket;
 	 PrintWriter out;
 	 BufferedReader in;
 	 chatServerParser parser;
@@ -49,13 +48,12 @@ public class ChatServer implements Runnable
 	  * Current implementation involves repeating an incoming message to the connected client.
 	  * @throws IOException
 	  */
-	 public void listenAndProvideService() throws IOException
+	 public void listenAndProvideService(Socket clientSocket) throws IOException
 	 {
 		 //debug
 		 System.out.println("Listening for incoming connection: ");
 		 
 		 //Accept an incoming connection, and create writers and readers.
-		 clientSocket = serverSocket.accept();
 		 out = new PrintWriter(clientSocket.getOutputStream(), true);
 		 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 		 
@@ -102,17 +100,15 @@ public class ChatServer implements Runnable
 	@Override
 	public void run() 
 	{
-		try 
-		{
-			//debug
-			System.out.println("Listening Thread!");
-			this.listenAndProvideService();
+		while(true) {
+			 try {
+				Socket newConnection = serverSocket.accept();
+				this.commandThreads.submit(new Thread(new chatThread(newConnection, this)));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		catch (IOException e) 
-		{
-			System.out.println("Listen thread broke :/");
-		}
-		
 	}
 
 	/**
@@ -121,6 +117,29 @@ public class ChatServer implements Runnable
 	 */
 	public chatServerParser getChatServerParser() {
 		return parser;
+	}
+	
+	public class chatThread implements Runnable{
+		
+		public chatThread(Socket input, ChatServer application) {
+			this.run(input, application);
+		}
+		
+		public void run(Socket input, ChatServer application) {
+			System.out.println("Connected to: " + input.getInetAddress());
+			try {
+				application.listenAndProvideService(input);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 	
 }
