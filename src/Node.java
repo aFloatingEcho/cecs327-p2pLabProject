@@ -102,7 +102,7 @@ public class Node
 	 * Leave the network, closing any open connections and ports.
 	 */
 	public void leaveNetwork() {
-		
+		this.commandThreads.shutdown();
 	}
 	
 	/**
