@@ -49,7 +49,7 @@ public class ChatClient implements Runnable
 		running = true;
 		//While the exit command has not been entered, display messages from both the user and the server.
 		System.out.println("Connection established!");
-		while (!(fromServer = socketIn.readLine()).equals("QUIT") && running)
+		while (!(fromServer = socketIn.readLine()).equals("QUIT"))
 		{
 			//Display a message from the server.
 			System.out.println("Server: " + fromServer);
