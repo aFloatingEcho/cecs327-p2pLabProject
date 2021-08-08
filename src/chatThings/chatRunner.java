@@ -18,7 +18,7 @@ public class chatRunner {
 		ChatClient chatClient = new ChatClient(targetHostName, port);
 		
 		new Thread(chatClient, "Client").start();
-		new Thread(chatServer, "Server").start();
+		// new Thread(chatServer, "Server").start();
 		
 		
 		
