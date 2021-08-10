@@ -56,6 +56,7 @@ public class DataServer {
 				inputBuffer.read(brokenUp, 0, brokenUp.length);
 				output = this.connection.getOutputStream();
 				while((readPosition = input.read(brokenUp, 0, brokenUp.length)) > 0){
+					System.out.println("Sending: " + this.fileName + " (" + currentPosition + "/" + brokenUp.length + ")");
 					output.write(brokenUp, 0, currentPosition);
 				}
 				output.flush();
