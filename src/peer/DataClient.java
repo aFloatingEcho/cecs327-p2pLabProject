@@ -70,7 +70,7 @@ public class DataClient {
 			outputBuffer = new BufferedOutputStream(output);
 			// Read the file continously while its being transfered
 			readPosition = input.read(brokenUp);
-			output.write(brokenUp, 0, brokenUp.length);
+			outputBuffer.write(brokenUp, 0, readPosition);
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
