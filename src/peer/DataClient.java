@@ -68,10 +68,10 @@ public class DataClient {
 			input = this.clientConnection.getInputStream();
 			outputBuffer = new BufferedOutputStream(output);
 			// Read the file continously while its being transfered
-			while((readPosition = input.read(brokenUp, 0, brokenUp.length)) > 0){
+			while((readPosition = input.read(brokenUp, currentPosition, brokenUp.length)) < brokenUp.length){
 				outputBuffer.write(brokenUp, 0, currentPosition);
+				currentPosition = readPosition;
 			}
-			currentPosition = readPosition;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return false;
