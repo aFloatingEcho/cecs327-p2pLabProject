@@ -6,12 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 public class DataClient {
 
 	public static void main(String[] args) throws IOException {
-		String serverName = "";
-		String fileName = "";
+		String serverName = "cheeseburger";
+		String fileName = "sync\\file.png";
 		DataClient test = new DataClient(5555, fileName, serverName);
 		test.acceptFile();
 	}
@@ -20,7 +21,7 @@ public class DataClient {
 	private Socket clientConnection = null;
 	private String fileName = null;
 	// TODO: Seriously, fix that magic number with some dynamic way- perhaps in chat indicate the length in the string.
-	private int temp_size = 1000000; //capped the total size to 1 mb
+	private int temp_size = 100000; //capped the total size to 1 mb
 	
 	/**
 	 * Default constructor (do not use, it defaults a port number that is already in use)
@@ -68,10 +69,9 @@ public class DataClient {
 			input = this.clientConnection.getInputStream();
 			outputBuffer = new BufferedOutputStream(output);
 			// Read the file continously while its being transfered
-			while((readPosition = input.read(brokenUp, currentPosition, brokenUp.length)) < brokenUp.length){
-				outputBuffer.write(brokenUp, 0, currentPosition);
-				currentPosition = readPosition;
-			}
+			readPosition = input.read(brokenUp);
+			output.write(brokenUp, 0, brokenUp.length);
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return false;
@@ -82,9 +82,8 @@ public class DataClient {
 		
 		// Write the file out, and close all buffers on completion.
 		try {
-			outputBuffer.flush();
+			output.flush();
 			output.close();
-			outputBuffer.close();
 			this.clientConnection.close();
 			System.out.println(this.fileName + " has been recieved!");
 		} catch (IOException e) {
