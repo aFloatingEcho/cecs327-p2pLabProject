@@ -95,11 +95,15 @@ public class ChatServer implements Runnable
 	@Override
 	public void run() 
 	{
+		Boolean anotherLoop = true;
 		try 
 		{
 			//debug
 			System.out.println("Listening Thread!");
+			do {
 			this.listenAndProvideService();
+			}
+			while(anotherLoop);
 		}
 		catch (IOException e) 
 		{
