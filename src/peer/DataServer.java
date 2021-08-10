@@ -11,7 +11,7 @@ import java.net.Socket;
 public class DataServer {
 	
 	public static void main(String[] args) throws IOException {
-		DataServer test = new DataServer(5555, "sync\\testing.txt");
+		DataServer test = new DataServer(5555, "sync\\file.png");
 		test.transferFile();
 	}
 
@@ -46,18 +46,16 @@ public class DataServer {
 			try {
 				this.connection = this.dataServer.accept();
 				System.out.println("Connection Accepted: " + this.connection);
-				System.out.println("Trasfering:" + fileName);
 				// Sending File
 				File fileToSend = new File(this.fileName);
-				byte[] brokenUp = new byte[(int)(fileToSend.length())]; // Break up the file
+				long fileLength = fileToSend.length();
+				System.out.println("Trasfering:" + fileName + " (" + fileLength + " byte(s))");
+				byte[] brokenUp = new byte[(int)(fileLength)]; // Break up the file
 				// Wrap the file in buffer before sending.
 				input = new FileInputStream(fileToSend);
 				inputBuffer = new BufferedInputStream(input);
-				inputBuffer.read(brokenUp, 0, brokenUp.length);
 				output = this.connection.getOutputStream();
-				while((readPosition = input.read(brokenUp, currentPosition, brokenUp.length)) < brokenUp.length){
-					System.out.println("Sending: " + this.fileName + " (" + currentPosition + "/" + brokenUp.length + ")");
-					currentPosition = readPosition;
+				while((currentPosition = inputBuffer.read(brokenUp)) > 0) {
 					output.write(brokenUp, 0, currentPosition);
 				}
 				output.flush();
