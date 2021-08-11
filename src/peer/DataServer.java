@@ -11,7 +11,7 @@ import java.net.Socket;
 public class DataServer {
 	
 	public static void main(String[] args) throws IOException {
-		DataServer test = new DataServer(5555, "sync\\testing.txt");
+		DataServer test = new DataServer(5555, "sync\\file.png");
 		test.transferFile();
 	}
 
@@ -33,6 +33,8 @@ public class DataServer {
 	}
 	
 	public boolean transferFile() {
+		// Set variables for the current position as well as the position read
+		int currentPosition = 0, readPosition;
 		// Stream used to input the file (https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/FileInputStream.html)
 		FileInputStream input = null;
 		// Stream used to buffer the input without calling the system (https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/BufferedInputStream.html)
@@ -46,13 +48,16 @@ public class DataServer {
 				System.out.println("Connection Accepted: " + this.connection);
 				// Sending File
 				File fileToSend = new File(this.fileName);
-				byte[] brokenUp = new byte[(int)(fileToSend.length())]; // Break up the file
+				long fileLength = fileToSend.length();
+				System.out.println("Trasfering:" + fileName + " (" + fileLength + " byte(s))");
+				byte[] brokenUp = new byte[(int)(fileLength)]; // Break up the file
 				// Wrap the file in buffer before sending.
 				input = new FileInputStream(fileToSend);
 				inputBuffer = new BufferedInputStream(input);
-				inputBuffer.read(brokenUp, 0, brokenUp.length);
 				output = this.connection.getOutputStream();
-				output.write(brokenUp, 0, brokenUp.length);
+				while((currentPosition = inputBuffer.read(brokenUp)) > 0) {
+					output.write(brokenUp, 0, currentPosition);
+				}
 				output.flush();
 				running = true;
 				System.out.println("Finished Output.");
@@ -63,7 +68,9 @@ public class DataServer {
 			}
 			finally {
 				try {
-					this.dataServer.close();
+					if(running) {
+						this.dataServer.close();
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

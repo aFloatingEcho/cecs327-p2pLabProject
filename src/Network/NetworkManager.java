@@ -39,8 +39,10 @@ public class NetworkManager {
 	 * @throws InterruptedException
 	 */
 	public List<String> getAllLocalIPAddresses() throws InterruptedException{
+//	public List<InetAddress> getAllLocalIPAddresses() throws InterruptedException{
 		List<String> allLocalIPs = new ArrayList<>();
-		ExecutorService es = Executors.newCachedThreadPool(); 
+//		List<InetAddress> allLocalIPs = new ArrayList<>();
+		ExecutorService es = Executors.newCachedThreadPool();
 		for(NetworkInterface eachAddress : Collections.list(this.INET)) {
 			es.submit(new Thread(new Runnable() {
 				@Override
@@ -69,7 +71,9 @@ public class NetworkManager {
 	 * @return List<String>
 	 */
 	public static List<String> getLocalIPAddresses(InetAddress networkAddress) throws InterruptedException {
+//	public static List<InetAddress> getLocalIPAddresses(InetAddress networkAddress) throws InterruptedException {
 		List<String> localIPs = new ArrayList<>();
+//		List<InetAddress> localIPs = new ArrayList<>();
 		// Break this function if it turns out that we are on a loopback address.
 		if(networkAddress.isLoopbackAddress() == true) {
 			System.out.println("Is loopback, will not attempt to find addresses.");
@@ -88,6 +92,7 @@ public class NetworkManager {
 						String localIP = address.toString().substring(1);   // instantiates the string value of the address
 						if (address.isReachable(5000)) {
 							localIPs.add(localIP);
+//							localIPs.add(address);
 							System.out.println(localIP + " is on the network (" + networkAddress + ")");
 						}
 					} catch (Exception e) {
